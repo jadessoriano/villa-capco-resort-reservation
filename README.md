@@ -27,51 +27,51 @@ unauthenticated user | book a room
 Clone the repository and go to `villa-capcoresort-reservation` directory.
 > Open a terminal preperably `Git Bash`
 > You may be ask to login so just click the link that will be shown.
-```console
+```terminal
 git clone https://github.com/Philiks/villa-capco-resort-reservation.git
 cd villa-capco-resort-reservation
 ```
 copy the `.env.example` and named it `.env`.
 > This contains the environment variables such as **application name**, **database connection**, and **url**.
-```console
-$ cp .env.example .env
+```terminal
+cp .env.example .env
 ```
 Create database.
 > You may create the database by any method that you prefer. The snippet below uses the MariaDB CLI.
 > You can use `http://localhost/phpmyadmin` to create your database. Just make sure the name of the dabatase is `villa_capco`
-```console
+```terminal
 mariadb -u root -p
 MariaDB [(none)]> CREATE DATABASE villa_capco;
 MariaDB [(none)]> quit
 ```
 Install composer packages.
-```console
+```terminal
 composer install
 ```
 Install node packages.
-```console
+```terminal
 npm install
 ```
 Generate application key.
-```console
+```terminal
 php artisan key:generate
 ```
 Create a symbolic link to access storage static files from public.
-```console
+```terminal
 php artisan storage:link
 ```
 Migrate `database/migrations` files and run `database/seeders` as well.
-```console
+```terminal
 php artisan migrate --seed
 ```
 Finally, start the laravel server and the node server.
 > This are the only step you need to do if you've already done every steps.<br>
 > **You should not terminate this command while you're using the website.** Otherwise press `ctrl + C` to terminate the command. 
-```console
+```terminal
 php artisan serve
 ```
 > In another terminal.
-```console
+```terminal
 npm run dev
 ```
 
