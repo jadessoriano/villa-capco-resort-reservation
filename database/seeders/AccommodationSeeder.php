@@ -69,7 +69,7 @@ class AccommodationSeeder extends Seeder
         ];
         Accommodation::create([
             'name' => "Pool 3",
-            'details' => '1 pool,2 rooms with 3 double deck beds each,3 bathrooms,free wifi,TV with netflix,refrigerator',
+            'details' => '1 pool,3 rooms with 3 double deck beds each,3 bathrooms,free wifi,TV with netflix,refrigerator',
         ])->packages()->attach($packages);
 
         $packages = [
