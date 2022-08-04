@@ -81,7 +81,7 @@
         <x-price :value="$total" />
         <div class="{{ $show_cancel_reservation ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
         {{-- Rebook --}}
-        <x-button class="{{ $show_cancel_reservation ? 'hidden' : '' }} bg-yellow-600 font-bold" wire:click=rebook()>Rebook</x-button>
+        <x-button class="{{ $show_cancel_reservation ? 'hidden' : '' }} bg-yellow-400 font-bold" wire:click=rebook()>Rebook</x-button>
 
         {{-- Calendar --}}
         @if ($show_calendar)
@@ -108,7 +108,7 @@
     </div>
 
     {{-- Receipt Link --}}
-    <a id="receipt-link" class="hidden" href="{{'storage/' . $reservation->receipt_path}}" target="_blank"></a>
+    <a id="receipt-link" class="hidden" href="{{asset('storage/' . $reservation->receipt_path)}}" target="_blank"></a>
 </div>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">

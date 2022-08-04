@@ -9,6 +9,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Filters\MultiSelectFilter;
 
 class ReservationResource extends Resource
 {
@@ -38,7 +39,13 @@ class ReservationResource extends Resource
                 Tables\Columns\TextColumn::make('accommodation.name'),
                 Tables\Columns\TextColumn::make('package.name'),
                 Tables\Columns\TextColumn::make('user.email'),
-                Tables\Columns\TextColumn::make('status.name'),
+                Tables\Columns\BadgeColumn::make('status.name')
+                    ->colors([
+                        'primary' => 'Booked',
+                        'warning' => 'Rebooked',
+                        'danger' => 'Cancelled',
+                        'success' => 'Done',
+                    ]),
                 Tables\Columns\TextColumn::make('no_of_people'),
                 Tables\Columns\TextColumn::make('amount_to_pay')
                     ->money('php'),
@@ -51,7 +58,8 @@ class ReservationResource extends Resource
                     ->date(),
             ])
             ->filters([
-                //
+                MultiSelectFilter::make('status')
+                    ->relationship('status', 'name'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
