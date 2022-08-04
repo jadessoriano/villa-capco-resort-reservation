@@ -49,8 +49,8 @@ class AccommodationSeeder extends Seeder
             ],
         ];
         Accommodation::create([
-            'name' => "Pool 2",
-            'details' => '1 pool,2 rooms with 2 beds each,2 bathrooms',
+            'name' => "Pool 2 ",
+            'details' => '1 pool,2 air conditioned rooms with 1 single bed, 1 double deck bed,1 bathroom,free wifi,TV with netflix,refrigerator',
         ])->packages()->attach($packages);
 
         $packages = [
@@ -69,7 +69,7 @@ class AccommodationSeeder extends Seeder
         ];
         Accommodation::create([
             'name' => "Pool 3",
-            'details' => '1 pool,2 rooms with 3 beds each,3 bathrooms',
+            'details' => '1 pool,2 rooms with 3 double deck beds each,3 bathrooms,free wifi,TV with netflix,refrigerator',
         ])->packages()->attach($packages);
 
         $packages = [
@@ -88,13 +88,13 @@ class AccommodationSeeder extends Seeder
         ];
         Accommodation::create([
             'name' => "Pool 4",
-            'details' => '1 pool,3 rooms with multiple beds each,4 bathrooms',
+            'details' => '1 pool,3 rooms with queen size bed each,4 bathrooms,free wifi,TV with netflix,refrigerator',
         ])->packages()->attach($packages);
 
         $package = [
             1 => /* morning */ [
                 'rate' => Format::moneyForDatabase(20_000),
-                'max_people' => 25
+                'max_people' => 60
             ],
         ];
         Accommodation::create([
