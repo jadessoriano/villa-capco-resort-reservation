@@ -17,16 +17,16 @@ class AccommodationSeeder extends Seeder
     {
         $packages = [
             1 => /* morning */ [
-                'rate' => Format::moneyForDatabase(10_000),
-                'max_people' => 15
+                'rate' => Format::moneyForDatabase(8_000),
+                'max_people' => 8
             ],
             2 => /* evening */ [
-                'rate' => Format::moneyForDatabase(13_000),
-                'max_people' => 15
+                'rate' => Format::moneyForDatabase(10_000),
+                'max_people' => 8
             ],
             3 => /* whole day */ [
-                'rate' => Format::moneyForDatabase(25_000),
-                'max_people' => 20
+                'rate' => Format::moneyForDatabase(15_000),
+                'max_people' => 10
             ],
         ];
         Accommodation::create([
@@ -36,16 +36,16 @@ class AccommodationSeeder extends Seeder
 
         $packages = [
             1 => /* morning */ [
-                'rate' => Format::moneyForDatabase(18_000),
-                'max_people' => 20
+                'rate' => Format::moneyForDatabase(12_000),
+                'max_people' => 10
             ],
             2 => /* evening */ [
-                'rate' => Format::moneyForDatabase(22_000),
-                'max_people' => 20
+                'rate' => Format::moneyForDatabase(14_000),
+                'max_people' => 10
             ],
             3 => /* whole day */ [
-                'rate' => Format::moneyForDatabase(30_000),
-                'max_people' => 25
+                'rate' => Format::moneyForDatabase(18_000),
+                'max_people' => 15
             ],
         ];
         Accommodation::create([
@@ -55,16 +55,16 @@ class AccommodationSeeder extends Seeder
 
         $packages = [
             1 => /* morning */ [
-                'rate' => Format::moneyForDatabase(22_000),
-                'max_people' => 25
+                'rate' => Format::moneyForDatabase(15_000),
+                'max_people' => 15
             ],
             2 => /* evening */ [
-                'rate' => Format::moneyForDatabase(25_000),
-                'max_people' => 25
+                'rate' => Format::moneyForDatabase(18_000),
+                'max_people' => 15
             ],
             3 => /* whole day */ [
-                'rate' => Format::moneyForDatabase(35_000),
-                'max_people' => 30
+                'rate' => Format::moneyForDatabase(25_000),
+                'max_people' => 25
             ],
         ];
         Accommodation::create([
@@ -83,7 +83,7 @@ class AccommodationSeeder extends Seeder
             ],
             3 => /* whole day */ [
                 'rate' => Format::moneyForDatabase(35_000),
-                'max_people' => 35
+                'max_people' => 30
             ],
         ];
         Accommodation::create([
