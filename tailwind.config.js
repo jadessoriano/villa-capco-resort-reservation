@@ -9,12 +9,6 @@ module.exports = {
     ],
 
     theme: {
-        colors: {
-            'primary': '#CA8A04',
-            'warning': '#FACC15',
-            'danger': '#EF4444',
-            'success': '#15803C',
-        },
         extend: {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
