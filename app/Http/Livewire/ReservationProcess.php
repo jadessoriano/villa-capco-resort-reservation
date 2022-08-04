@@ -69,7 +69,7 @@ class ReservationProcess extends Component
         // Save in cache to prevent querying everytime
         // accommodation - function hall is selected
         $this->function_hall_addon_id = Addon::where(
-            'name', 'Function Hall'
+            'name', 'Function Hall (if you rent Pools 1-4)'
         )->first()->id;
         $this->function_hall_accommodation_id = Accommodation::where(
             'name', 'Function Hall'
