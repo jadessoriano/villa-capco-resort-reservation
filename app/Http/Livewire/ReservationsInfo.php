@@ -95,8 +95,8 @@ class ReservationsInfo extends Component
             'reserved_date' => Carbon::parse($this->rebook_date),
             'status_id' => Status::where('name', 'Rebooked')->pluck('id')->first()
         ]);
-        event(new ReservationUpdated($this->reservation));
         $this->dispatchBrowserEvent('reservation-updated');
+        event(new ReservationUpdated($this->reservation));
     }
 
     public function hideCancelReservation() {
@@ -114,6 +114,7 @@ class ReservationsInfo extends Component
             'reserved_date' => null,
             'status_id' => Status::where('name', 'Cancelled')->pluck('id')->first()
         ]);
+        $this->dispatchBrowserEvent('reservation-deleted');
         event(new ReservationDeleted($this->reservation));
     }
 

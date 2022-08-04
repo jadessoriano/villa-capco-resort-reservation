@@ -35,7 +35,7 @@
                                     <td>
                                         <x-schedule class="mt-0" :start_time="$package['start_time']" :end_time="$package['end_time']" />
                                     </td>
-                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->reserved_date->format('D M j, Y')" /></td>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->reserved_date?->format('D M j, Y')" /></td>
                                 </tr>
                                 <tr>
                                     <th class="pt-3">No. of People</th>
@@ -60,14 +60,14 @@
                             @php
                                 $excess_people = 0;
                                 if ($id == $add_person_addon_id)
-                                    $excess_people = $no_of_people - $package['max_people'];
+                                    $excess_people = $reservation->no_of_people - $package['max_people'];
                             @endphp
                             <div class="bg-secondary-bg rounded-lg text-white flex items-center">
                                 <x-price class="inline !text-sm" :value="$addon['rate']" />
                                 <x-label for="{{$addon['name']}}" :value="__($addon['name'])" class="inline !text-white mr-2" />
                                 @if ($excess_people > 0)
-                                    <x-label :value="__('Qty')" class="inline border-l-2 mx-2 pl-2" />
-                                    <x-label :value="__($no_of_people - $package['max_people'])" class="inline" />
+                                    <x-label :value="__('Qty')" class="!text-white inline border-l-2 mr-2 pl-2" />
+                                    <x-label :value="__($reservation->no_of_people - $package['max_people'])" class="!text-white inline mr-2" />
                                 @endif
                             </div>
                         </div>
@@ -146,7 +146,13 @@
     })
     
     window.addEventListener('reservation-updated', event => {
+        window.location.reload();
         alert("Reservation has been successfully rebooked.");
         document.getElementById('receipt-link').click();
+    })
+    
+    window.addEventListener('reservation-deleted', event => {
+        window.location.reload();
+        alert("Reservation has been successfully cancelled.");
     })
 </script>

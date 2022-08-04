@@ -197,6 +197,7 @@
     });
     
     window.addEventListener('reservation-created', event => {
+        window.location.reload();
         alert(event.detail.accommodation + " has been successfully reserved.");
         document.getElementById('receipt-link').click();
     })

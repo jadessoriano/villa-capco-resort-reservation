@@ -182,9 +182,8 @@ class ReservationProcess extends Component
         ]);
         $this->receipt_path = asset('storage/' . $receipt_path);
 
-        event(new ReservationCreated($reservation));
-
         $this->dispatchBrowserEvent('reservation-created', ['accommodation' => $this->summary_details['accommodation']]);
+        event(new ReservationCreated($reservation));
     }
 
     private function computeTotal()
