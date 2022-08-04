@@ -16,7 +16,7 @@ class AddonSeeder extends Seeder
     public function run()
     {
         Addon::create([
-            'name' => 'Function Hall ',
+            'name' => 'Function Hall',
             'description' => 'A facility that serves place for people who wanted to celebate specific occasions. Can be partnered with your pool of choice.',
             'rate' => Format::moneyForDatabase(10_000),
             'image_path' => 'images/addons/function_hall.jpg',

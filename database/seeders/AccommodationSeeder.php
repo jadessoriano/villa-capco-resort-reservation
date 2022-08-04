@@ -96,6 +96,14 @@ class AccommodationSeeder extends Seeder
                 'rate' => Format::moneyForDatabase(20_000),
                 'max_people' => 60
             ],
+            2 => /* evening */ [
+                'rate' => Format::moneyForDatabase(20_000),
+                'max_people' => 60
+            ],
+            3 => /* whole day */ [
+                'rate' => Format::moneyForDatabase(35_000),
+                'max_people' => 60
+            ],
         ];
         Accommodation::create([
             'name' => "Function Hall",
