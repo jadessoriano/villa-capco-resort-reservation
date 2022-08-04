@@ -36,7 +36,7 @@ class FaqSeeder extends Seeder
 
         Faq::create([
             'question' => "What's your cheapest accommodation?",
-            'answer' => "Villa Capco's Pool 1 which has 1 room with 2 beds is only 10,000 pesos in morning package.",
+            'answer' => "Villa Capco's Pool 1 which has 2 rooms with 2 beds and other amenities is only 8,000 pesos in morning package.",
         ]);
 
         Faq::create([
