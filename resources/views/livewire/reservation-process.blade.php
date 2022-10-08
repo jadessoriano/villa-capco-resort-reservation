@@ -151,15 +151,24 @@
             </div>
         </div>
     </div>
-    <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
-        <x-card-title :value="'Total'" />
-        <x-price :value="$total" />
-        @if ($no_of_people > 0 && $reserved_date != null)
-            <div class="border-l-2 border-primary-fg px-1 py-5"></div>
-            <x-button wire:click=reserve()>Reserve</x-button>
-        @endif
+    <div class="flex justify-start flex-col items-start gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
+        <div>
+            <x-card-title :value="'Total'" />
+            <x-price :value="$total" />
+            @if ($no_of_people > 0 && $reserved_date != null)
+                {{-- <div class="border-l-2 border-primary-fg px-1 py-5"></div> --}}
+                <div class="flex justify-start items-start flex-col" x-data="{ isChecked: false }">
+                    <x-button class="mb-2" ::disabled="!isChecked" wire:click=reserve()>Reserve</x-button>
+                    <div class="flex items-center">
+                        <div class="flex h-5 items-center">
+                          <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" @click="isChecked = ! isChecked">
+                        </div>
+                        <x-terms />
+                    </div>
+                </div>
+            @endif
+        </div>
     </div>
-
     {{-- Receipt Link --}}
     <a id="receipt-link" class="hidden" href="{{$receipt_path}}" target="_blank"></a>
 </div>
