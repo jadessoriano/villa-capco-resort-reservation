@@ -69,7 +69,7 @@ class ReservationProcess extends Component
         // Save in cache to prevent querying everytime
         // accommodation - function hall is selected
         $this->function_hall_addon_id = Addon::where(
-            'name', 'Function Hall (if you rent Pools 1-4)'
+            'name', 'Function Hall'
         )->first()->id;
         $this->function_hall_accommodation_id = Accommodation::where(
             'name', 'Function Hall'
@@ -174,6 +174,7 @@ class ReservationProcess extends Component
             'reserved_date' => Carbon::parse($this->reserved_date),
         ]);
         $reservation->addons()->attach($this->selected_addons);
+
         // $qr_code_path = Reservation::getQrCodeFilepathFor($reservation->transaction_no);
         // $receipt_path = Reservation::getReceiptFilepathFor($reservation->transaction_no);
         // $reservation->update([

@@ -151,6 +151,7 @@
             </div>
         </div>
     </div>
+
     {{-- Payments --}}
     <div x-data="{ open: false, selectedPayment: '' }">
         <div class="{{$no_of_people > 0 && $reserved_date != null ? '' : 'hidden'}} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
@@ -182,7 +183,6 @@
             <x-button wire:click=reserve()>Reserve</x-button>
         @endif
     </div>
-
     {{-- Receipt Link --}}
     <a id="receipt-link" class="hidden" href="{{$receipt_path}}" target="_blank"></a>
 </div>
@@ -221,6 +221,7 @@
     });
     
     window.addEventListener('reservation-created', event => {
+        window.location.reload();
         alert(event.detail.accommodation + " has been successfully reserved.");
         document.getElementById('receipt-link').click();
     })
