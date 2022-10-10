@@ -174,6 +174,7 @@ class ReservationProcess extends Component
             'reserved_date' => Carbon::parse($this->reserved_date),
         ]);
         $reservation->addons()->attach($this->selected_addons);
+
         // $qr_code_path = Reservation::getQrCodeFilepathFor($reservation->transaction_no);
         // $receipt_path = Reservation::getReceiptFilepathFor($reservation->transaction_no);
         // $reservation->update([
