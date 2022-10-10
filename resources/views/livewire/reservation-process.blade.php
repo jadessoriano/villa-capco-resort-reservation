@@ -151,23 +151,37 @@
             </div>
         </div>
     </div>
-    <div class="flex justify-start flex-col items-start gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
-        <div>
-            <x-card-title :value="'Total'" />
-            <x-price :value="$total" />
-            @if ($no_of_people > 0 && $reserved_date != null)
-                {{-- <div class="border-l-2 border-primary-fg px-1 py-5"></div> --}}
-                <div class="flex justify-start items-start flex-col" x-data="{ isChecked: false }">
-                    <x-button class="mb-2" ::disabled="!isChecked" wire:click=reserve()>Reserve</x-button>
-                    <div class="flex items-center">
-                        <div class="flex h-5 items-center">
-                          <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" @click="isChecked = ! isChecked">
-                        </div>
-                        <x-terms />
-                    </div>
+
+    {{-- Payments --}}
+    <div x-data="{ open: false, selectedPayment: '' }">
+        <div class="{{$no_of_people > 0 && $reserved_date != null ? '' : 'hidden'}} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
+            <div>
+                <x-card-title :value="'Select Payment Method'" />
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <label class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
+                        <input type="radio" name="payment-choice" value="COD" class="sr-only" aria-labelledby="size-choice-2-label" x-model="selectedPayment" @click="open = false">
+                        <span id="size-choice-2-label">Cash on Delivery (COD)</span>
+                        <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == 'COD' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
+                    </label>
+                    <label class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
+                        <input type="radio" name="payment-choice" value="PayPal" class="sr-only" aria-labelledby="size-choice-2-label" x-model="selectedPayment" @click="open = ! open">
+                        <span id="size-choice-2-label">PayPal</span>
+                        <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == 'PayPal' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
+                    </label>
                 </div>
-            @endif
+            </div>
+            <div class="mt-6" :class="open ? '' : 'hidden'" wire:ignore>
+                <div id="paypal-button-container"></div>
+            </div>
         </div>
+    </div>
+    <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
+        <x-card-title :value="'Total'" />
+        <x-price :value="$total" />
+        @if ($no_of_people > 0 && $reserved_date != null)
+            <div class="border-l-2 border-primary-fg px-1 py-5"></div>
+            <x-button wire:click=reserve()>Reserve</x-button>
+        @endif
     </div>
     {{-- Receipt Link --}}
     <a id="receipt-link" class="hidden" href="{{$receipt_path}}" target="_blank"></a>
@@ -176,6 +190,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
 <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AWFlRJqqlVBzhfQZcNZv8OyfkRAH7jFGcGIYq2Zs1jQP-oOgIAeXpKju6viuf8Aqu--ilfUTk1LfAhBo&currency=PHP"></script>
 <script>
     var datePicker = document.getElementById('reserved_date');
     let nextWeekTime = new Date().getTime() + 7 * 24 * 60 * 60 *1000;
@@ -210,4 +225,34 @@
         alert(event.detail.accommodation + " has been successfully reserved.");
         document.getElementById('receipt-link').click();
     })
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        paypal.Buttons({    
+            style: {
+                layout: "vertical",
+                color: "blue",
+                shape: "pill",
+                label: "pay",
+            },
+            createOrder: function (data, actions) {
+                return actions.order.create({
+                    purchase_units: [
+                    {
+                        amount: {
+                        value: 500, // pakipalitan jade
+                        },
+                    },
+                    ],
+                });
+            },
+            onApprove: function (data, actions) {
+                console.log("Data :" + data);
+                console.log("Action : " + actions);
+                return actions.order.capture().then(function (details) {
+                    console.log(details);
+                });
+            },
+        }).render('#paypal-button-container');
+    });
 </script>
