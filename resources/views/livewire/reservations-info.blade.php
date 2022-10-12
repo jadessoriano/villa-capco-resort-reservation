@@ -45,6 +45,32 @@
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->no_of_people" /></td>
                                     <td><x-price class="inline" :value="$package['rate']" /></td>
                                 </tr>
+                                <tr>
+                                    <th class="pt-3">Extension (<span>{{ $this->reservation->extension_status ?? 'N/A' }}</span>)</th>
+                                    <th class="pt-3"></th>
+                                </tr>
+                                <tr>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$extendedPackage->name" /></td>
+                                    <td>
+                                        <x-schedule class="mt-0" :start_time="$extendedPackage->start_time" :end_time="$extendedPackage->end_time" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$extendedDate?->format('D M j, Y')" /></td>
+                                    <td>
+                                        @if (! $this->reservation->isExtensionRequested()
+                                            && $this->isNextSlotPackageForExtensionAvailable)
+                                            <form action="{{ route('guest.extension.request') }}" method="POST">
+                                                @csrf
+                                                <input name="reservationNumber" value="{{ $this->reservation->transaction_no }}" type="text" hidden>
+                                                <input name="extendedPackageId" value="{{ $this->extendedPackage->id }}" type="text" hidden>
+                                                <input name="extendedDate" value="{{ $this->extendedDate->format('Y-m-d') }}" type="text" hidden>
+
+                                                <x-button class="bg-green-600 font-bold" type="submit">REQUEST EXTENSION</x-button>
+                                            </form>
+                                        @endif 
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

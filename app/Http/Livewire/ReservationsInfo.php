@@ -2,10 +2,13 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\ExtensionStatus;
+use App\Enums\PackageName;
 use App\Events\ReservationDeleted;
 use App\Events\ReservationUpdated;
 use App\Models\Accommodation;
 use App\Models\Addon;
+use App\Models\Package;
 use App\Models\Reservation;
 use App\Models\Status;
 use Carbon\Carbon;
@@ -24,6 +27,10 @@ class ReservationsInfo extends Component
     public $show_calendar = false;
     public $show_cancel_reservation = false;
     public $rebook_date;
+
+    public ?Package $extendedPackage = null;
+    public ?Carbon $extendedDate = null;
+    public bool $isNextSlotPackageForExtensionAvailable = false;
 
     protected $listeners = [
         'datePickerPicked' => 'changeRebookDate',
@@ -73,6 +80,14 @@ class ReservationsInfo extends Component
 
         $this->computeTotal();
         $this->collectReservedDates();
+        $this->getNextSlotPackageForExtension();
+        
+        if (! $this->checkIfNextSlotPackageForExtensionIsAvailable()
+            && $this->reservation->isExtensionOpen()) 
+        {
+            $this->reservation->extension_status = ExtensionStatus::unavailable->value;
+            $this->reservation->save();
+        }
     }
 
     public function cancelRebook() {
@@ -140,5 +155,36 @@ class ReservationsInfo extends Component
             ->pluck('reserved_date')
             ->map(fn ($item) => $item->format('m/d/Y'))
             ->toArray();
+    }
+
+    private function getNextSlotPackageForExtension(): void
+    {
+        if ($this->reservation->package->name === PackageName::morning->value) {
+            /** 
+             * If current schedule is Morning get the Evening schedule
+             * for the extension.
+             * */ 
+            $this->extendedPackage = Package::whereName(PackageName::evening->value)->first();
+            $this->extendedDate = $this->reservation->reserved_date;
+        } else {
+            /** 
+             * If current schedule is Evening/Whole Day get the next Morning
+             * for the extension.
+             * */            
+            $this->extendedPackage = Package::whereName(PackageName::morning->value)->first();
+            $this->extendedDate = Carbon::parse($this->reservation->reserved_date)->addDay();
+        }
+    }
+
+    private function checkIfNextSlotPackageForExtensionIsAvailable(): bool
+    {
+        $reservation = Reservation::where([
+            ['package_id', $this->extendedPackage->id],
+            ['reserved_date', '=', $this->extendedDate->format('Y-m-d')]
+        ])->first();
+
+        $this->isNextSlotPackageForExtensionAvailable = is_null($reservation);
+
+        return $this->isNextSlotPackageForExtensionAvailable;
     }
 }
