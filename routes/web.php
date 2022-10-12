@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers;
 use App\Http\Controllers\Auth\UserController;
 use App\Models\Accommodation;
 use App\Models\Addon;
@@ -58,6 +59,9 @@ Route::get('/', function () {
 Route::get('/admin', function () {
     return redirect('/admin/accommodations');
 });
+
+Route::post('/extension/request', [ Controllers\ExtensionController::class, 'test'])
+    ->name('guest.extension.request');
 
 Route::middleware('auth')->group(function () {
     /*

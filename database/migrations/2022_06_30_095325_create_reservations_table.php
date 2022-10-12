@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ExtensionStatus;
 use App\Models\Accommodation;
 use App\Models\Package;
 use App\Models\Status;
@@ -36,6 +37,14 @@ return new class extends Migration
             $table->string('receipt_path')
                   ->nullable()
                   ->comment('Receipt will be made after the qr code has been created.');
+            $table->unsignedBigInteger('extended_package_id')
+                ->nullable()
+                ->comment('Null means no extension was requested.');
+            $table->foreign('extended_package_id')->references('id')->on('packages');
+            $table->date('extension_date')
+                ->nullable()
+                ->comment('Null means no extension was requested.');
+            $table->string('extension_status')->default(ExtensionStatus::open->value);
             $table->timestamps();
         });
     }
