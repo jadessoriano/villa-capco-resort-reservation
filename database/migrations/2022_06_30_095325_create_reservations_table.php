@@ -2,6 +2,7 @@
 
 use App\Enums\ExtensionStatus;
 use App\Models\Accommodation;
+use App\Models\Catering;
 use App\Models\Package;
 use App\Models\Status;
 use App\Models\User;
@@ -45,6 +46,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('Null means no extension was requested.');
             $table->string('extension_status')->default(ExtensionStatus::open->value);
+            $table->foreignIdFor(Catering::class)->nullable();
             $table->timestamps();
         });
     }

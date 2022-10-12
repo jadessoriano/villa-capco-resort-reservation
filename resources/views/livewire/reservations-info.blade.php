@@ -99,6 +99,16 @@
                         </div>
                     @endforeach
                 </div>
+
+                <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
+                    <p>Catering:</p>
+                    <div class="my-3 flex items-center gap-2">
+                        <div class="bg-secondary-bg rounded-lg text-white flex items-center">
+                            <x-price class="inline" :value="$this->catering->rate" />
+                            <x-tag class="mt-0 bg-secondary-bg" :value="$this->catering->name" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
