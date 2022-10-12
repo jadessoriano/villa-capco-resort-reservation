@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Events\ReservationCreated;
 use App\Models\Accommodation;
 use App\Models\Addon;
+use App\Models\Catering;
 use App\Models\Reservation;
 use App\Models\Status;
 use Carbon\Carbon;
@@ -26,9 +27,11 @@ class ReservationProcess extends Component
     public $summary_details = []; /* including accommodation. */
     public $selected_accommodation_id; /* for summary */
     public $selected_package_id; /* for display of dropdown */
+    public $selected_catering_id; /* for display of dropdown */
     public $selected_addons = []; /* for computation */
     public $accommodations = [];
     public $addons = [];
+    public $caterings = [];
     public $no_of_people;
     public $reserved_date;
     public $total = 0;
@@ -59,6 +62,14 @@ class ReservationProcess extends Component
             ])->toArray();
 
         $this->addons = Addon::all()
+            ->mapWithKeys(fn ($item) => [
+                $item['id'] => [
+                    'name' => $item['name'],
+                    'rate' => $item['rate']
+                ]
+            ])->toArray();
+
+        $this->caterings = Catering::all()
             ->mapWithKeys(fn ($item) => [
                 $item['id'] => [
                     'name' => $item['name'],
@@ -147,6 +158,13 @@ class ReservationProcess extends Component
         $this->computeTotal();
     }
 
+    public function selectCatering(string $catering_id): void 
+    {
+        $this->selected_catering_id = $catering_id;
+
+        $this->computeTotal();
+    }   
+
     public function numberOfPeopleChanged($no_of_people)
     {
         $this->no_of_people = $no_of_people;
@@ -172,6 +190,7 @@ class ReservationProcess extends Component
             'amount_to_pay' => $this->total,
             'mode_of_payment' => "Cash",
             'reserved_date' => Carbon::parse($this->reserved_date),
+            'catering_id' => $this->selected_catering_id
         ]);
         $reservation->addons()->attach($this->selected_addons);
 
@@ -201,5 +220,7 @@ class ReservationProcess extends Component
          */
         foreach ($this->selected_addons as $id=>$addon)
             $this->total += $addon['quantity'] * $this->addons[$id]['rate'];
+
+        if ($this->selected_catering_id) $this->total += $this->caterings[$this->selected_catering_id]['rate'];
     }
 }

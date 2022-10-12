@@ -4,6 +4,7 @@ use App\Http\Controllers;
 use App\Http\Controllers\Auth\UserController;
 use App\Models\Accommodation;
 use App\Models\Addon;
+use App\Models\Catering;
 use App\Models\Faq;
 use App\Models\Rating;
 use App\Models\Reservation;
@@ -36,6 +37,11 @@ Route::get('/facilities', function () {
     $addons = Addon::all();
     return view('app.facilities', compact("addons"));
 })->name('facilities');
+
+Route::get('/caterings', function () {
+    $caterings = Catering::all();
+    return view('app.catering', compact("caterings"));
+})->name('caterings');
 
 Route::get('/faqs', function () {
     $faqs = Faq::all();

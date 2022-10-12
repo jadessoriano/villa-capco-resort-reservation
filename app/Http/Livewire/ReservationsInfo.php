@@ -8,6 +8,7 @@ use App\Events\ReservationDeleted;
 use App\Events\ReservationUpdated;
 use App\Models\Accommodation;
 use App\Models\Addon;
+use App\Models\Catering;
 use App\Models\Package;
 use App\Models\Reservation;
 use App\Models\Status;
@@ -30,6 +31,8 @@ class ReservationsInfo extends Component
 
     public ?Package $extendedPackage = null;
     public ?Carbon $extendedDate = null;
+    public ?Catering $catering = null;
+
     public bool $isNextSlotPackageForExtensionAvailable = false;
 
     protected $listeners = [
@@ -73,6 +76,8 @@ class ReservationsInfo extends Component
                     'quantity' => $item->pivot['quantity']
                 ]
             ])->toArray();
+
+        $this->catering = $this->reservation->catering;
 
         $this->add_person_addon_id = Addon::where(
             'name', 'Additional Person'
@@ -143,6 +148,8 @@ class ReservationsInfo extends Component
          */
         foreach ($this->addons as $addon)
             $this->total += $addon['quantity'] * $addon['rate'];
+
+        $this->total += $this->catering->rate;
     }
 
     private function collectReservedDates()

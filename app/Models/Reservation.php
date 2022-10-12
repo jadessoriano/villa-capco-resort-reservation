@@ -84,6 +84,7 @@ class Reservation extends Model
         'reserved_date',
         'qr_code_path',
         'receipt_path',
+        'catering_id'
     ];
 
     /**
@@ -137,6 +138,11 @@ class Reservation extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function catering(): BelongsTo
+    {
+        return $this->belongsTo(Catering::class);
     }
 
     /**

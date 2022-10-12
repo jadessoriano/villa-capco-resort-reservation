@@ -149,12 +149,43 @@
                 <x-label for="reserved_date" :value="__('Reservation date')" class="inline pl-2" />
                 <x-input id="reserved_date" class="inline w-fit py-0 px-1" :value="$reserved_date" required autofocus />
             </div>
+
+            {{-- Catering --}}
+            <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+                <x-label for="reserved_date" :value="__('Catering')" class="inline pl-2" />
+                <div class="inline-block border-2 border-primary-fg w-fit px-2">
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button class="flex items-center text-sm font-medium text-primary-fg hover:text-secondary-fg hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                <div>{{ $selected_catering_id ? $caterings[$selected_catering_id]['name'] : 'Select a Catering' }}</div>
+
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            @foreach ($caterings as $id=>$catering)
+                                <div class="m-2">
+                                    <x-button id="{{$catering['name']}}" class="w-full flex flex-col" wire:click="selectCatering({{$id}})">
+                                        <p class="text-white text-md font-bold">{{ $catering['name'] }}</p>
+                                        <p class="text-[8px]">{{ $catering['rate'] }}</p>
+                                    </x-button>
+                                </div>
+                            @endforeach
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+            </div>
         </div>
     </div>
 
     {{-- Payments --}}
     <div x-data="{ open: false, selectedPayment: '' }">
-        <div class="{{$no_of_people > 0 && $reserved_date != null ? '' : 'hidden'}} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
+        <div class="{{$no_of_people > 0 && $reserved_date != null && $selected_catering_id ? '' : 'hidden'}} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
             <div>
                 <x-card-title :value="'Select Payment Method'" />
                 <div class="grid grid-cols-2 gap-4 mt-4">
@@ -178,7 +209,7 @@
     <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Total'" />
         <x-price :value="$total" />
-        @if ($no_of_people > 0 && $reserved_date != null)
+        @if ($no_of_people > 0 && $reserved_date != null && $selected_catering_id)
             <div class="border-l-2 border-primary-fg px-1 py-5"></div>
             <x-button wire:click=reserve()>Reserve</x-button>
         @endif
