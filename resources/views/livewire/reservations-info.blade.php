@@ -117,6 +117,7 @@
                     <table>
                         <thead class="text-primary-fg text-left align-top">
                             <tr>
+                                <th>Name</th>
                                 <th>Type</th>
                                 <th>Amount</th>
                                 <th>Status</th>
@@ -125,6 +126,7 @@
                         <tbody>
                             @foreach($this->reservation->payments as $payment)
                                 <tr>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->name->value" /></td>
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->type->value" /></td>
                                     <td><x-price class="inline" :value="$payment->amount_to_pay" /></td>
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->status->value" /></td>
