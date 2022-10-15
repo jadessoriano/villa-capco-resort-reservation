@@ -138,11 +138,19 @@
 
         <div class="{{$summary_details ? '' : 'hidden'}} flex gap-5 items-center" >
             {{-- No of People --}}
+            @if ($summary_details)
+                <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+                    <x-label for="no_of_people" :value="__('No. of people')" class="inline  pl-2" />
+                    <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min=1 name="no_of_people" :value="old('no_of_people')" :max="$summary_details['max_people']" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
+                </div>
+            @endif
+            {{-- No of Seniors / PWD --}}
+            @if ($summary_details)
             <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
-                <x-label for="no_of_people" :value="__('No. of people')" class="inline  pl-2" />
-                <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min=1 name="no_of_people" :value="old('no_of_people')" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
+                <x-label for="no_of_discount" :value="__('No. of Seniors / PWD')" class="inline  pl-2" />
+                <x-input id="no_of_discount" class="inline w-[50px] py-0 px-1" type="number" min=1 name="no_of_discount" :value="old('no_of_discount')" :max="$summary_details['max_people']" wire:change="numberOfPeopleChanged($event.target.value)" autofocus />
             </div>
-
+            @endif
             {{-- Reserved Date --}}
             <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
                 <x-label for="reserved_date" :value="__('*should be at least one week ahead')" class="block text-right text-primary-fg text-xs" />
