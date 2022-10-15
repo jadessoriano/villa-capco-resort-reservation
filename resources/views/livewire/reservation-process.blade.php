@@ -185,7 +185,11 @@
 
     {{-- Payments --}}
     <div x-data="{ show: false, selectedPayment: @entangle('selectedPayment') }">
-        <div class="{{$no_of_people > 0 && $reserved_date != null && $selected_catering_id ? '' : 'hidden'}} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
+        <div class="{{ $no_of_people > 0 
+                        && $reserved_date != null 
+                        && $selected_catering_id
+                            ? '' 
+                            : 'hidden' }} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
             <div>
                 <x-card-title :value="'Select Payment Method'" />
                 <div class="flex items-center">
@@ -221,7 +225,7 @@
                     </label>
                 </div>
             </div>
-            <div class="mt-6" :class="show || 'hidden'" wire:ignore>
+            <div class="mt-6" :class="isChecked && show || 'hidden'" wire:ignore>
                 <div id="paypal-button-container"></div>
             </div>
         </div>
