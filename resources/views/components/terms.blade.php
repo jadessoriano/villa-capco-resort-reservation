@@ -1,8 +1,8 @@
 <div class="ml-1 text-sm" x-data="{ open: false }">
   <label for="terms" class="font-medium">I have read and agree to the <span class="ml-1 text-secondary-fg hover:text-primary-fg cursor-pointer" @click="open = !open">Terms and Condition</span></label>
-  <div class="relative z-10" x-show="open" @click="open = false">
+  <div class="relative z-50" x-show="open" @click="open = false">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-    <div class="fixed inset-0 z-10 overflow-y-auto">
+    <div class="fixed inset-0 z-50 overflow-y-auto">
       <div class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
         <div class="overflow-x-hidden overflow-y-auto fixed h-modal md:h-full top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center">
             <div class="relative flex justify-center items-center mx-auto w-full max-w-2xl px-4 h-full">

@@ -1,4 +1,4 @@
-<div>
+<div x-data="{isChecked: false}">
     <div class="h-fit p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Package'" />
         <div class="flex items-start gap-10">
@@ -184,15 +184,25 @@
     </div>
 
     {{-- Payments --}}
-    <div x-data="{ open: false, selectedPayment: @entangle('selectedPayment') }">
-        <div class="{{$no_of_people > 0 && $reserved_date != null && $selected_catering_id ? '' : 'hidden'}} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
+    <div x-data="{ show: false, selectedPayment: @entangle('selectedPayment') }">
+        <div class="{{ $no_of_people > 0 
+                        && $reserved_date != null 
+                        && $selected_catering_id
+                            ? '' 
+                            : 'hidden' }} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
             <div>
                 <x-card-title :value="'Select Payment Method'" />
+                <div class="flex items-center">
+                    <div class="flex h-5 items-center">
+                      <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" @click="isChecked = ! isChecked">
+                    </div>
+                    <x-terms />
+                </div>
                 <div class="grid grid-cols-2 gap-4 mt-4">
-                    <label class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
+                    <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
                         <input 
                             x-model="selectedPayment" 
-                            @click="open = false"
+                            @click="show = false"
                             type="radio" 
                             name="payment-choice" 
                             value="{{\App\Enums\PaymentType::cod->value}}" 
@@ -201,10 +211,10 @@
                         <span id="size-choice-2-label">Cash on Delivery (COD)</span>
                         <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::cod->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
                     </label>
-                    <label class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
+                    <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
                         <input 
                             x-model="selectedPayment" 
-                            @click="open = ! open"
+                            @click="show = ! show"
                             type="radio" 
                             name="payment-choice" 
                             value="{{\App\Enums\PaymentType::paypal->value}}" 
@@ -215,7 +225,7 @@
                     </label>
                 </div>
             </div>
-            <div class="mt-6" :class="open ? '' : 'hidden'" wire:ignore>
+            <div class="mt-6" :class="isChecked && show || 'hidden'" wire:ignore>
                 <div id="paypal-button-container"></div>
             </div>
         </div>
@@ -229,7 +239,7 @@
             && $selected_catering_id
             && $this->selectedPayment === \App\Enums\PaymentType::cod->value)
             <div class="border-l-2 border-primary-fg px-1 py-5"></div>
-            <x-button wire:click=reserve()>Reserve</x-button>
+            <x-button ::disabled="!isChecked" wire:click=reserve()>Reserve</x-button>
         @endif
     </div>
     {{-- Receipt Link --}}
