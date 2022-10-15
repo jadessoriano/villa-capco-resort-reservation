@@ -42,7 +42,7 @@ class AddonResource extends Resource
                         ->maxValue(99_999)
                         ->normalizeZeros()
                         ->thousandsSeparator(',')),
-                Forms\Components\TextArea::make('description')
+                Forms\Components\Textarea::make('description')
                     ->required()
                     ->maxLength(65_535)
                     ->columnSpan([
