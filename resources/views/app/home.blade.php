@@ -57,4 +57,17 @@
             </article>
         @endforeach
     </div>
+    <div class="flex justify-center items-center mt-20">
+        <h1 class="mb-8 text-center text-3xl w-3/4 font-bold border-b-2 pb-5 text-secondary-fg border-secondary-fg">
+            Company Profile
+        </h1>
+    </div>
+    <div class="container mx-auto">
+        <div class="mb-10 px-8 lg:flex lg:justify-center lg:space-x-8">
+            <iframe class="w-full" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15447.507150333346!2d121.0877006!3d14.5490378!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xf6fe8b234f443b32!2sVilla%20Capco!5e0!3m2!1sen!2sph!4v1665798708542!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <p class="mt-5 text-lg lg:w-1/2 lg:mt-0 lg:text-2xl">
+                Villa Capco opened early 2019 and is a family owned business. Villa capco’s goal is to provide affordable yet quality service to our clients. We ensure that the safety and the comfort of our clients are on top of the list. Our rate is notably reasonable for a metropolitan location.
+            </p>
+        </div>
+    </div>
 </x-app-layout>
