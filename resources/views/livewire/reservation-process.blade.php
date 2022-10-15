@@ -152,7 +152,7 @@
 
             {{-- Catering --}}
             <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
-                <x-label for="reserved_date" :value="__('Catering')" class="inline pl-2" />
+                <x-label for="reserved_date" :value="__('Catering Package')" class="inline pl-2" />
                 <div class="inline-block border-2 border-primary-fg w-fit px-2">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
@@ -184,20 +184,34 @@
     </div>
 
     {{-- Payments --}}
-    <div x-data="{ open: false, selectedPayment: '' }">
+    <div x-data="{ open: false, selectedPayment: @entangle('selectedPayment') }">
         <div class="{{$no_of_people > 0 && $reserved_date != null && $selected_catering_id ? '' : 'hidden'}} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
             <div>
                 <x-card-title :value="'Select Payment Method'" />
                 <div class="grid grid-cols-2 gap-4 mt-4">
                     <label class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
-                        <input type="radio" name="payment-choice" value="COD" class="sr-only" aria-labelledby="size-choice-2-label" x-model="selectedPayment" @click="open = false">
+                        <input 
+                            x-model="selectedPayment" 
+                            @click="open = false"
+                            type="radio" 
+                            name="payment-choice" 
+                            value="{{\App\Enums\PaymentType::cod->value}}" 
+                            class="sr-only" 
+                            aria-labelledby="size-choice-2-label">
                         <span id="size-choice-2-label">Cash on Delivery (COD)</span>
-                        <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == 'COD' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
+                        <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::cod->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
                     </label>
                     <label class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
-                        <input type="radio" name="payment-choice" value="PayPal" class="sr-only" aria-labelledby="size-choice-2-label" x-model="selectedPayment" @click="open = ! open">
+                        <input 
+                            x-model="selectedPayment" 
+                            @click="open = ! open"
+                            type="radio" 
+                            name="payment-choice" 
+                            value="{{\App\Enums\PaymentType::paypal->value}}" 
+                            class="sr-only" 
+                            aria-labelledby="size-choice-2-label">
                         <span id="size-choice-2-label">PayPal</span>
-                        <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == 'PayPal' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
+                        <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::paypal->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
                     </label>
                 </div>
             </div>
@@ -206,10 +220,14 @@
             </div>
         </div>
     </div>
+    
     <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Total'" />
         <x-price :value="$total" />
-        @if ($no_of_people > 0 && $reserved_date != null && $selected_catering_id)
+        @if ($no_of_people > 0 
+            && $reserved_date != null 
+            && $selected_catering_id
+            && $this->selectedPayment === \App\Enums\PaymentType::cod->value)
             <div class="border-l-2 border-primary-fg px-1 py-5"></div>
             <x-button wire:click=reserve()>Reserve</x-button>
         @endif
@@ -218,72 +236,77 @@
     <a id="receipt-link" class="hidden" href="{{$receipt_path}}" target="_blank"></a>
 </div>
 
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
-<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=AWFlRJqqlVBzhfQZcNZv8OyfkRAH7jFGcGIYq2Zs1jQP-oOgIAeXpKju6viuf8Aqu--ilfUTk1LfAhBo&currency=PHP"></script>
-<script>
-    var datePicker = document.getElementById('reserved_date');
-    let nextWeekTime = new Date().getTime() + 7 * 24 * 60 * 60 *1000;
-    let disabledDates = [];
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+@endpush
 
-    var picker = new Pikaday({
-        field: document.getElementById('reserved_date'),
-        firstDay: 0, /* start with Sunday */
-        defaultDate: new Date(nextWeekTime),
-        minDate: new Date(nextWeekTime),
-        maxDate: new Date(2022, 12, 31),
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AWFlRJqqlVBzhfQZcNZv8OyfkRAH7jFGcGIYq2Zs1jQP-oOgIAeXpKju6viuf8Aqu--ilfUTk1LfAhBo&currency=PHP"></script>
+    <script>
+        var datePicker = document.getElementById('reserved_date');
+        let nextWeekTime = new Date().getTime() + 7 * 24 * 60 * 60 *1000;
+        let disabledDates = [];
 
-        disableDayFn: function (date) {
-            let formattedDate = moment(date).format('MM/DD/YYYY');
-            return disabledDates.includes(formattedDate);
-        },
+        var picker = new Pikaday({
+            field: document.getElementById('reserved_date'),
+            firstDay: 0, /* start with Sunday */
+            defaultDate: new Date(nextWeekTime),
+            minDate: new Date(nextWeekTime),
+            maxDate: new Date(2022, 12, 31),
 
-        onSelect: function(date) {
-            datePicker.value = moment(date).format('Do MMMM YYYY');
-            Livewire.emit('datePickerPicked', datePicker.value);
-        }
-    });
+            disableDayFn: function (date) {
+                let formattedDate = moment(date).format('MM/DD/YYYY');
+                return disabledDates.includes(formattedDate);
+            },
 
-    document.addEventListener("DOMContentLoaded", () => {
-        Livewire.hook('message.processed', (el, component) => {
-            disabledDates = @this.disabledDates;
+            onSelect: function(date) {
+                datePicker.value = moment(date).format('Do MMMM YYYY');
+                Livewire.emit('datePickerPicked', datePicker.value);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            Livewire.hook('message.processed', (el, component) => {
+                disabledDates = @this.disabledDates;
+            })
+        });
+        
+        window.addEventListener('reservation-created', event => {
+            window.location.reload();
+            alert(event.detail.accommodation + " has been successfully reserved.");
+            document.getElementById('receipt-link').click();
         })
-    });
-    
-    window.addEventListener('reservation-created', event => {
-        window.location.reload();
-        alert(event.detail.accommodation + " has been successfully reserved.");
-        document.getElementById('receipt-link').click();
-    })
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        paypal.Buttons({    
-            style: {
-                layout: "vertical",
-                color: "blue",
-                shape: "pill",
-                label: "pay",
-            },
-            createOrder: function (data, actions) {
-                return actions.order.create({
-                    purchase_units: [
-                    {
-                        amount: {
-                        value: 500, // pakipalitan jade
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            paypal.Buttons({    
+                style: {
+                    layout: "vertical",
+                    color: "blue",
+                    shape: "pill",
+                    label: "pay",
+                },
+                createOrder: function (data, actions) {
+                    return actions.order.create({
+                        purchase_units: [
+                        {
+                            amount: {
+                            value: 1, // {{ $total }} pa replace na lang niyan kung need, laki ng value eh baka maubos agad yung laman ng account
+                            },
                         },
-                    },
-                    ],
-                });
-            },
-            onApprove: function (data, actions) {
-                console.log("Data :" + data);
-                console.log("Action : " + actions);
-                return actions.order.capture().then(function (details) {
-                    console.log(details);
-                });
-            },
-        }).render('#paypal-button-container');
-    });
-</script>
+                        ],
+                    });
+                },
+                onApprove: function (data, actions) {
+                    console.log("Data :" + data);
+                    console.log("Action : " + actions);
+                    return actions.order.capture().then(function (details) {
+                        window.livewire.emit('reserve')
+                    });
+                },
+            }).render('#paypal-button-container');
+        });
+    </script>
+@endpush

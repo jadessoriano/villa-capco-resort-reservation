@@ -77,8 +77,8 @@
                 </div>
             </div>
 
-            {{-- Addons --}}
             <div class="mt-3 w-[400px]">
+                {{-- AddOns --}}
                 <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
                     <p>Addons:</p>
                     @foreach ($addons as $id=>$addon)
@@ -100,8 +100,9 @@
                     @endforeach
                 </div>
 
+                {{-- Catering --}}
                 <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
-                    <p>Catering:</p>
+                    <p>Catering Package:</p>
                     <div class="my-3 flex items-center gap-2">
                         <div class="bg-secondary-bg rounded-lg text-white flex items-center">
                             <x-price class="inline" :value="$this->catering->rate" />
@@ -109,7 +110,33 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Payment --}}
+                <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
+                    <p>Payments:</p>
+                    <table>
+                        <thead class="text-primary-fg text-left align-top">
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($this->reservation->payments as $payment)
+                                <tr>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->name->value" /></td>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->type->value" /></td>
+                                    <td><x-price class="inline" :value="$payment->amount_to_pay" /></td>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->status->value" /></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            
         </div>
     </div>
     <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">

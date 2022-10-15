@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Reservation extends Model
@@ -143,6 +144,11 @@ class Reservation extends Model
     public function catering(): BelongsTo
     {
         return $this->belongsTo(Catering::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'reservation_transaction_no', 'transaction_no');
     }
 
     /**

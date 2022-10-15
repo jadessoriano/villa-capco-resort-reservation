@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums;
 use App\Events\ReservationCreated;
 use App\Models\Accommodation;
 use App\Models\Addon;
 use App\Models\Catering;
+use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\Status;
 use Carbon\Carbon;
@@ -13,7 +15,7 @@ use Livewire\Component;
 
 class ReservationProcess extends Component
 {
-    public $reservation = [];
+    public ?Reservation $reservation = null;
     public $package_names = [];
     /**
      * accommodation
@@ -42,8 +44,11 @@ class ReservationProcess extends Component
     public $receipt_path;
     public $disabledDates = []; /* For JS */
 
+    public string $selectedPayment = '';
+
     protected $listeners = [
         'datePickerPicked' => 'reservedDateChanged',
+        'reserve'
     ];
 
     public function render()
@@ -179,9 +184,23 @@ class ReservationProcess extends Component
         $this->reserved_date = $reserved_date;
     }
 
+    private function payment()
+    {
+        $payment = new Payment();
+        $payment->name = Enums\PaymentName::reservation->value;
+        $payment->reservation_transaction_no = $this->reservation->transaction_no;
+        $payment->type = $this->selectedPayment;
+        $payment->status = $this->selectedPayment === Enums\PaymentType::cod->value
+            ? Enums\PaymentStatus::unpaid->value
+            : Enums\PaymentStatus::paid->value;
+        $payment->amount_to_pay = $this->total;
+        
+        $payment->save();
+    }
+
     public function reserve()
     {
-        $reservation = Reservation::create([
+        $this->reservation = Reservation::create([
             'accommodation_id' => $this->selected_accommodation_id,
             'package_id' => $this->selected_package_id,
             'user_id' => auth()->user()->id,
@@ -192,8 +211,9 @@ class ReservationProcess extends Component
             'reserved_date' => Carbon::parse($this->reserved_date),
             'catering_id' => $this->selected_catering_id
         ]);
-        $reservation->addons()->attach($this->selected_addons);
+        $this->reservation->addons()->attach($this->selected_addons);        
 
+        $this->payment();
         // $qr_code_path = Reservation::getQrCodeFilepathFor($reservation->transaction_no);
         // $receipt_path = Reservation::getReceiptFilepathFor($reservation->transaction_no);
         // $reservation->update([

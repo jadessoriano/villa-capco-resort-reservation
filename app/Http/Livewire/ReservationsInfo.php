@@ -77,6 +77,7 @@ class ReservationsInfo extends Component
                 ]
             ])->toArray();
 
+        $this->reservation->with('payments');
         $this->catering = $this->reservation->catering;
 
         $this->add_person_addon_id = Addon::where(

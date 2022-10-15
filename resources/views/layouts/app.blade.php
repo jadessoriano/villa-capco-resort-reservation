@@ -11,6 +11,7 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+        @stack('styles')
 
         <!-- Livewire -->
         @livewireStyles
@@ -37,5 +38,7 @@
                 Have a visit at our resort at <span class="text-blue-500">55 Axis Road, Kalawaan, Pasig, Philippines</span><br />
             </footer>
         </div>
+
+        @stack('scripts')
     </body>
 </html>
