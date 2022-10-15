@@ -3,24 +3,24 @@
 namespace App\Filament\Resources;
 
 use App\Facades\Format;
-use App\Filament\Resources\AddonResource\Pages;
-use App\Models\Addon;
+use App\Filament\Resources\CateringResource\Pages;
+use App\Filament\Resources\CateringResource\RelationManagers;
+use App\Models\Catering;
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AddonResource extends Resource
+class CateringResource extends Resource
 {
-    protected static ?string $model = Addon::class;
+    protected static ?string $model = Catering::class;
 
     protected static ?string $navigationGroup = 'Reservation';
 
-    protected static ?string $navigationIcon = 'heroicon-o-inbox';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
     public static function form(Form $form): Form
     {
@@ -35,23 +35,35 @@ class AddonResource extends Resource
                     ->placeholder(1_299)
                     ->prefix('₱')
                     ->numeric()
-                    ->mask(fn (TextInput\Mask $mask) => $mask
+                    ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
                         ->numeric()
                         ->decimalPlaces(2)
                         ->minValue(1)
                         ->maxValue(99_999)
                         ->normalizeZeros()
                         ->thousandsSeparator(',')),
-                Forms\Components\Textarea::make('description')
+                Forms\Components\RichEditor::make('description')
                     ->required()
-                    ->maxLength(65_535)
+                    ->toolbarButtons([
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'undo',
+                    ])
                     ->columnSpan([
                         'sm' => 2
                     ]),
                 Forms\Components\FileUpload::make('image_path')
                     ->required()
                     ->imagePreviewHeight(200)
-                    ->directory('images/addons')
+                    ->directory('images/addons') //TODO: change path to caterings.
                     ->preserveFilenames()
                     ->image()
                     ->imageCropAspectRatio('16:9')
@@ -66,22 +78,23 @@ class AddonResource extends Resource
                 Tables\Columns\ImageColumn::make('image_path')
                     ->rounded()
                     ->size(150)
-                    ->url(fn (Addon $record): string => $record->image_path, true),
+                    ->url(fn (Catering $record): string => $record->image_path, true),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
-                    ->extraAttributes(['style' => 'width: 30rem'])
-                    ->wrap(),
+                    ->extraAttributes(['style' => 'width: 20rem'])
+                    ->wrap()
+                    ->html(),
                 Tables\Columns\TextColumn::make('rate')
                     ->money('php'),
+                // Tables\Columns\TextColumn::make('image_path'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->date(),
+                    ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->date(),
+                    ->dateTime(),
             ])
             ->filters([
-                // Rate
-                Filter::make('rate')
+                Tables\Filters\Filter::make('rate')
                     ->form([
                         Forms\Components\TextInput::make('rate')
                             ->required()
@@ -89,7 +102,7 @@ class AddonResource extends Resource
                             ->placeholder(1_299)
                             ->prefix('₱')
                             ->numeric()
-                            ->mask(fn (TextInput\Mask $mask) => $mask
+                            ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
                                 ->numeric()
                                 ->decimalPlaces(2)
                                 ->minValue(1)
@@ -123,9 +136,9 @@ class AddonResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAddons::route('/'),
-            'create' => Pages\CreateAddon::route('/create'),
-            'edit' => Pages\EditAddon::route('/{record}/edit'),
+            'index' => Pages\ListCaterings::route('/'),
+            'create' => Pages\CreateCatering::route('/create'),
+            'edit' => Pages\EditCatering::route('/{record}/edit'),
         ];
     }    
 }
