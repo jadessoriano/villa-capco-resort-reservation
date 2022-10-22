@@ -10,6 +10,7 @@ use App\Models\Catering;
 use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\Status;
+use App\Services\Format;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -45,6 +46,8 @@ class ReservationProcess extends Component
     public $disabledDates = []; /* For JS */
 
     public string $selectedPayment = '';
+
+    public const DISCOUNT_VALUE = 20;
 
     protected $listeners = [
         'datePickerPicked' => 'reservedDateChanged',
@@ -136,6 +139,7 @@ class ReservationProcess extends Component
             'end_time' => $package->end_time,
             'rate' => $package->pivot->rate,
             'max_people' => $package->pivot->max_people,
+            'no_of_discount' => 0
         ];
 
         $this->disabledDates = Reservation::where([
@@ -179,12 +183,19 @@ class ReservationProcess extends Component
         $this->computeTotal();
     }
 
+    public function numberOfDiscountChanged($no_of_people): void
+    {
+        $this->summary_details['no_of_discount'] = $no_of_people;
+
+        $this->computeTotal();
+    }
+
     public function reservedDateChanged($reserved_date)
     {
         $this->reserved_date = $reserved_date;
     }
 
-    private function payment()
+    private function payment(): void
     {
         $payment = new Payment();
         $payment->name = Enums\PaymentName::reservation->value;
@@ -241,6 +252,23 @@ class ReservationProcess extends Component
         foreach ($this->selected_addons as $id=>$addon)
             $this->total += $addon['quantity'] * $this->addons[$id]['rate'];
 
-        if ($this->selected_catering_id) $this->total += $this->caterings[$this->selected_catering_id]['rate'];
+        // add catering package price.
+        if (empty($this->selected_catering_id)) return;
+
+        $this->total += $this->caterings[$this->selected_catering_id]['rate'];
+
+        // discount
+        $this->applyDiscount();
+    }
+
+    private function applyDiscount(): void
+    {
+        if ($this->summary_details['no_of_discount'] == 0) return;
+        
+        $format = new Format();
+
+        $discount = $format->moneyForDisplay($this->total) / ($this->summary_details['no_of_discount'] * self::DISCOUNT_VALUE);
+
+        $this->total -= $format->moneyForDatabase($discount);
     }
 }
