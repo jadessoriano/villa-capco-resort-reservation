@@ -141,14 +141,15 @@
             @if ($summary_details)
                 <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
                     <x-label for="no_of_people" :value="__('No. of people')" class="inline  pl-2" />
-                    <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min=1 name="no_of_people" :value="old('no_of_people')" :max="$summary_details['max_people']" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
+                    <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min="1" name="no_of_people" :value="old('no_of_people')" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
                 </div>
             @endif
             {{-- No of Seniors / PWD --}}
             @if ($summary_details)
             <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+                <x-label for="no_of_discount" :value="(self::DISCOUNT_VALUE . __('% Discount'))" class="block text-right text-primary-fg text-xs" />
                 <x-label for="no_of_discount" :value="__('No. of Seniors / PWD')" class="inline  pl-2" />
-                <x-input id="no_of_discount" class="inline w-[50px] py-0 px-1" type="number" min=1 name="no_of_discount" :value="old('no_of_discount')" :max="$summary_details['max_people']" wire:change="numberOfPeopleChanged($event.target.value)" autofocus />
+                <x-input id="no_of_discount" class="inline w-[50px] py-0 px-1" type="number" min="0" name="no_of_discount" :value="old('no_of_discount')" :max="$this->no_of_people" wire:change="numberOfDiscountChanged($event.target.value)" autofocus />
             </div>
             @endif
             {{-- Reserved Date --}}
