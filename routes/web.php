@@ -51,7 +51,7 @@ Route::get('/faqs', function () {
 Route::get('/reservations/{accommodation_id?}/{package_id?}', function ($accommodation_id = null, $package_id = null) {
     $current_reservation = auth()->user() == null ?
         null :
-        Reservation::where([
+        \App\Models\Reservation::where([
             ['user_id', auth()->user()->id],
             ['reserved_date', '>=', Carbon::now()]
         ])->first();
