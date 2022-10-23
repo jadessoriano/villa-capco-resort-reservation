@@ -69,6 +69,9 @@ Route::get('/admin', function () {
 Route::post('/extension/request', [ Controllers\ExtensionController::class, 'test'])
     ->name('guest.extension.request');
 
+Route::post('newsletter/subscribe', [ Controllers\NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe');
+
 Route::middleware('auth')->group(function () {
     /*
      * Guest (customer) routes.
