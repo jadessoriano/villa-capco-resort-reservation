@@ -145,7 +145,7 @@ class ReservationProcess extends Component
         $this->disabledDates = Reservation::where([
                 ['package_id', $package_id],
                 ['accommodation_id', $this->selected_accommodation_id],
-                ['reserved_date', '>', Carbon::now()->addWeek()->toDateString()],
+                ['reserved_date', '>=', Carbon::now()->addWeek()->toDateString()],
             ])
             ->pluck('reserved_date')
             ->map(fn ($item) => $item->format('m/d/Y'))
