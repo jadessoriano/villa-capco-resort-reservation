@@ -293,9 +293,11 @@
         });
         
         window.addEventListener('reservation-created', event => {
-            window.location.reload();
-            alert(event.detail.accommodation + " has been successfully reserved.");
-            document.getElementById('receipt-link').click();
+            if(alert(event.detail.accommodation + " has been successfully reserved.")){}
+            else {
+                document.getElementById('receipt-link').click();
+                window.location.reload();
+            }
         })
     </script>
     <script>

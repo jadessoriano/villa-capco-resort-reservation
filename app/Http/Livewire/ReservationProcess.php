@@ -225,17 +225,18 @@ class ReservationProcess extends Component
         $this->reservation->addons()->attach($this->selected_addons);        
 
         $this->payment();
-        // $qr_code_path = Reservation::getQrCodeFilepathFor($reservation->transaction_no);
-        // $receipt_path = Reservation::getReceiptFilepathFor($reservation->transaction_no);
-        // $reservation->update([
-        //     'qr_code_path' => $qr_code_path,
-        //     'receipt_path' => $receipt_path,
-        // ]);
-        // $this->receipt_path = asset('storage/' . $receipt_path);
 
-        // event(new ReservationCreated($reservation));
+        $qr_code_path = Reservation::getQrCodeFilepathFor($this->reservation->transaction_no);
+        $receipt_path = Reservation::getReceiptFilepathFor($this->reservation->transaction_no);
+        $this->reservation->update([
+            'qr_code_path' => $qr_code_path,
+            'receipt_path' => $receipt_path,
+        ]);
+        $this->receipt_path = asset('storage/' . $receipt_path);
 
-        // $this->dispatchBrowserEvent('reservation-created', ['accommodation' => $this->summary_details['accommodation']]);
+        event(new ReservationCreated($this->reservation));
+
+        $this->dispatchBrowserEvent('reservation-created', ['accommodation' => $this->summary_details['accommodation']]);
     }
 
     private function computeTotal()
