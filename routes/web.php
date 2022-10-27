@@ -56,7 +56,11 @@ Route::get('/reservations/{accommodation_id?}/{package_id?}', function ($accommo
             ['reserved_date', '>=', Carbon::now()]
         ])->first();
     return view('app.reservations', compact('accommodation_id', 'package_id', 'current_reservation'));
-})->name('reservations');
+})->middleware('account')->name('reservations');
+
+Route::get('/create-new-account', function() {
+    return view('app.force-create-new-account');
+})->middleware('auth')->name('force.create.new.account');
 
 Route::get('/', function () {
     return redirect('/home');

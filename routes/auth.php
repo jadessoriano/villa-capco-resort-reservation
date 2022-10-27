@@ -53,4 +53,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+
+    Route::post('auth/create-new-account', [AuthenticatedSessionController::class, 'destroyAndRegister'])
+        ->name('logout.and.register');
 });

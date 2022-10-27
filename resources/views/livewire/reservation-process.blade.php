@@ -248,8 +248,10 @@
             && $selected_catering_id
             && $this->selectedPayment === \App\Enums\PaymentType::cod->value)
             <div class="border-l-2 border-primary-fg px-1 py-5"></div>
-            <x-button ::disabled="!isChecked" wire:click=reserve()>Reserve</x-button>
+            <x-button ::disabled="!isChecked" wire:click="reserve" wire:loading.remove>Reserve</x-button>
         @endif
+
+        <button wire:loading wire:target="reserve">Processing...</button>
     </div>
     {{-- Receipt Link --}}
     <a id="receipt-link" class="hidden" href="{{$receipt_path}}" target="_blank"></a>
