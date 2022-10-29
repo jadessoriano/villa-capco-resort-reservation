@@ -59,8 +59,10 @@ class AuthenticatedSessionController extends Controller
 
     public function destroyAndRegister(Request $request)
     {
+        $request->user()->delete();
+
         $this->logoutSession($request);
-        
+            
         return view('auth.register');
     }
 }
