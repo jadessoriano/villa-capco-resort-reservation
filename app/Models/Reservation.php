@@ -189,6 +189,10 @@ class Reservation extends Model
         return $this->extension_status === ExtensionStatus::open->value;
     }
 
+    public function isExtensionConfirming(): bool {
+        return $this->extension_status === ExtensionStatus::confirming->value;
+    }
+
     public function isExtensionRequested(): bool {
         return $this->extension_status === ExtensionStatus::confirming->value
             || $this->extension_status === ExtensionStatus::approved->value;
