@@ -136,7 +136,7 @@ class ReservationsInfo extends Component
             'status_id' => Status::where('name', 'Cancelled')->pluck('id')->first()
         ]);
         $this->dispatchBrowserEvent('reservation-deleted');
-        event(new ReservationDeleted($this->reservation));
+        event(new ReservationDeleted($this->reservation->transaction_no));
     }
 
     private function computeTotal()

@@ -8,6 +8,8 @@ use App\Events\ReservationUpdated;
 use App\Listeners\DeleteQrCodeAndReceipt;
 use App\Listeners\GenerateQrCodeAndReceipt;
 use App\Listeners\UpdateReceipt;
+use App\Listeners\SendMailReservationBookedStatus;
+use App\Listeners\SendMailReservationCancelledStatus;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,12 +27,14 @@ class EventServiceProvider extends ServiceProvider
         ],
         ReservationCreated::class => [
             GenerateQrCodeAndReceipt::class,
+            SendMailReservationBookedStatus::class
         ],
         ReservationUpdated::class => [
             UpdateReceipt::class,
         ],
         ReservationDeleted::class => [
             DeleteQrCodeAndReceipt::class,
+            SendMailReservationCancelledStatus::class
         ],
     ];
 

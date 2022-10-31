@@ -50,5 +50,9 @@ class AppServiceProvider extends ServiceProvider
                     ->icon('heroicon-s-cog'),
             ]);
         });
+
+        if(config('app.env') === 'production') {
+            \URL::forceScheme('https');
+        }
     }
 }

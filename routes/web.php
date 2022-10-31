@@ -51,12 +51,16 @@ Route::get('/faqs', function () {
 Route::get('/reservations/{accommodation_id?}/{package_id?}', function ($accommodation_id = null, $package_id = null) {
     $current_reservation = auth()->user() == null ?
         null :
-        Reservation::where([
+        \App\Models\Reservation::where([
             ['user_id', auth()->user()->id],
             ['reserved_date', '>=', Carbon::now()]
         ])->first();
     return view('app.reservations', compact('accommodation_id', 'package_id', 'current_reservation'));
-})->name('reservations');
+})->middleware('account')->name('reservations');
+
+Route::get('/create-new-account', function() {
+    return view('app.force-create-new-account');
+})->middleware('auth')->name('force.create.new.account');
 
 Route::get('/', function () {
     return redirect('/home');
@@ -68,6 +72,9 @@ Route::get('/admin', function () {
 
 Route::post('/extension/request', [ Controllers\ExtensionController::class, 'test'])
     ->name('guest.extension.request');
+
+Route::post('newsletter/subscribe', [ Controllers\NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe');
 
 Route::middleware('auth')->group(function () {
     /*

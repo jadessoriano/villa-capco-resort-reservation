@@ -48,10 +48,10 @@ return [
     'image' => [
         'enabled' => true,
         // Uncomment below if the OS is linux-based.
-        // 'binary' => base_path('vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64'),
+        'binary' => base_path('vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64'),
         // Uncomment below if the OS is windows.
         // Note: Be sure to install the `wkhtmltopdf` from https://wkhtmltopdf.org/downloads.html.
-        'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltoimage"',
+        // 'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltoimage"',
         'timeout' => false,
         'options' => ['enable-local-file-access' => true],
         'env'     => [],

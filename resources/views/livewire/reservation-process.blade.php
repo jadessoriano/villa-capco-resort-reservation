@@ -248,8 +248,10 @@
             && $selected_catering_id
             && $this->selectedPayment === \App\Enums\PaymentType::cod->value)
             <div class="border-l-2 border-primary-fg px-1 py-5"></div>
-            <x-button ::disabled="!isChecked" wire:click=reserve()>Reserve</x-button>
+            <x-button ::disabled="!isChecked" wire:click="reserve" wire:loading.remove>Reserve</x-button>
         @endif
+
+        <button wire:loading wire:target="reserve">Processing...</button>
     </div>
     {{-- Receipt Link --}}
     <a id="receipt-link" class="hidden" href="{{$receipt_path}}" target="_blank"></a>
@@ -293,9 +295,11 @@
         });
         
         window.addEventListener('reservation-created', event => {
-            window.location.reload();
-            alert(event.detail.accommodation + " has been successfully reserved.");
-            document.getElementById('receipt-link').click();
+            if(alert(event.detail.accommodation + " has been successfully reserved.")){}
+            else {
+                document.getElementById('receipt-link').click();
+                window.location.reload();
+            }
         })
     </script>
     <script>
@@ -312,15 +316,13 @@
                         purchase_units: [
                         {
                             amount: {
-                            value: 1, // {{ $total }} pa replace na lang niyan kung need, laki ng value eh baka maubos agad yung laman ng account
+                            value: @this.total / 100, // {{ $total }} pa replace na lang niyan kung need, laki ng value eh baka maubos agad yung laman ng account
                             },
                         },
                         ],
                     });
                 },
                 onApprove: function (data, actions) {
-                    console.log("Data :" + data);
-                    console.log("Action : " + actions);
                     return actions.order.capture().then(function (details) {
                         window.livewire.emit('reserve')
                     });

@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             ImageSeeder::class,
             RatingSeeder::class,
             StatusSeeder::class,
-            ReservationSeeder::class,
+            // ReservationSeeder::class,
         ]);
     }
 }

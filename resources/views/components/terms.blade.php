@@ -82,7 +82,7 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex justify-end items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button type="button" class="text-white bg-primary-bg font-medium rounded-lg text-sm px-5 py-2.5 text-center" @click="open = false">Close</button>
+                        <button type="button" class="text-white bg-secondary-bg font-medium rounded-lg text-sm px-5 py-2.5 text-center" @click="open = false">Close</button>
                     </div>
                 </div>
             </div>

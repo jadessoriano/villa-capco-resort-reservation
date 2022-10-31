@@ -56,7 +56,7 @@
                 </div>
             </article>
         @endforeach
-    </div>
+    </div>    
     <div class="flex justify-center items-center mt-20">
         <h1 class="mb-8 text-center text-3xl w-3/4 font-bold border-b-2 pb-5 text-secondary-fg border-secondary-fg">
             Company Profile
@@ -68,6 +68,27 @@
             <p class="mt-5 text-lg lg:w-1/2 lg:mt-0 lg:text-2xl">
                 Villa Capco opened early 2019 and is a family owned business. Villa capco’s goal is to provide affordable yet quality service to our clients. We ensure that the safety and the comfort of our clients are on top of the list. Our rate is notably reasonable for a metropolitan location.
             </p>
+        </div>
+    </div>
+    <div class="flex flex-col justify-center items-center mt-20">
+        <h1 class="text-center text-3xl w-3/4 font-bold border-b-2 pb-5 text-secondary-fg border-secondary-fg">
+            Newsletter
+        </h1>
+    </div>
+    <div class="p-6 container md:w-2/3 xl:w-auto mx-auto flex flex-col xl:items-stretch justify-between xl:flex-row">
+        <div class="xl:w-1/2 md:mb-14 xl:mb-0 relative h-auto flex items-center justify-center">
+            <img src="{{ asset('storage/images/newsletter.svg') }}" alt="Envelope with a newsletter" role="img" class="h-full xl:w-full lg:w-1/2 w-full" />
+        </div>
+        <div class="w-full xl:w-1/2 xl:pl-40 xl:py-28">
+            <h1 class="text-2xl md:text-4xl xl:text-5xl font-bold leading-10 text-gray-800 mb-4 text-center xl:text-left md:mt-0 mt-4">Subscribe</h1>
+            <p class="text-base leading-normal text-gray-600 text-center xl:text-left">Get the latest updates and promos every month in your inbox.</p>
+            <div class="mt-12">
+                <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex items-stretch">
+                    @csrf
+                    <input name="email" class="bg-gray-300 rounded-lg rounded-r-none text-base leading-none text-gray-800 p-5 w-4/5 border border-transparent focus:outline-none focus:border-secondary-bg" type="email" placeholder="Your Email" required/>
+                    <button class="w-32 rounded-l-none hover:bg-primary-fg bg-secondary-bg rounded text-base font-medium leading-none text-white p-5 uppercase focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-bg">subscribe</button>
+                </form>
+            </div>
         </div>
     </div>
 </x-app-layout>
