@@ -62,7 +62,7 @@ class Receipt
             'reserved_date' => date('D F j, Y', strtotime($reservation->reserved_date)),
             'start_time' => date('h:i A', strtotime($package->start_time)),
             'end_time' => date('h:i A', strtotime($package->end_time)),
-            'mode_of_payment' => $reservation->mode_of_payment,
+            'mode_of_payment' => $reservation->payment()->type ?? 'n/a',
             'accommodation' => $accommodation->name,
             'package' => $package->name,
             'rate' => Format::moneyForDisplay($package->pivot->rate),
