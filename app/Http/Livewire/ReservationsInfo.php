@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums;
 use App\Enums\ExtensionStatus;
 use App\Enums\PackageName;
 use App\Events\ReservationDeleted;
@@ -9,6 +10,7 @@ use App\Events\ReservationUpdated;
 use App\Models\Accommodation;
 use App\Models\Addon;
 use App\Models\Catering;
+use App\Models\Payment;
 use App\Models\Package;
 use App\Models\Reservation;
 use App\Models\Status;
@@ -34,9 +36,11 @@ class ReservationsInfo extends Component
     public ?Catering $catering = null;
 
     public bool $isNextSlotPackageForExtensionAvailable = false;
+    public string $selectedPayment = '';
 
     protected $listeners = [
         'datePickerPicked' => 'changeRebookDate',
+        'extend'
     ];
 
     public function render()
@@ -194,5 +198,24 @@ class ReservationsInfo extends Component
         $this->isNextSlotPackageForExtensionAvailable = is_null($reservation);
 
         return $this->isNextSlotPackageForExtensionAvailable;
+    }
+
+    public function extend(): void
+    {
+        $this->reservation->extension_status = Enums\ExtensionStatus::approved->value;
+        $this->reservation->save();
+        
+        $payment = new Payment();
+        $payment->name = Enums\PaymentName::extension->value;
+        $payment->reservation_transaction_no = $this->reservation->transaction_no;
+        $payment->type = $this->selectedPayment;
+        $payment->status = $this->selectedPayment === Enums\PaymentType::cod->value
+            ? Enums\PaymentStatus::unpaid->value
+            : Enums\PaymentStatus::paid->value;
+        $payment->amount_to_pay = $this->package['rate'];
+        
+        $payment->save();
+
+        $this->dispatchBrowserEvent('reservation-extended', ['accommodation' => $this->accommodation->name]);
     }
 }

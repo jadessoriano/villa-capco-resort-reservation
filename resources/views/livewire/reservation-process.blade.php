@@ -316,7 +316,7 @@
                         purchase_units: [
                         {
                             amount: {
-                            value: @this.total / 100, // {{ $total }} pa replace na lang niyan kung need, laki ng value eh baka maubos agad yung laman ng account
+                            value: @this.total / 100,
                             },
                         },
                         ],

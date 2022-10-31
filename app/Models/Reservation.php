@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ExtensionStatus;
+use App\Enums\PaymentName;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -188,8 +189,19 @@ class Reservation extends Model
         return $this->extension_status === ExtensionStatus::open->value;
     }
 
+    public function isExtensionConfirming(): bool {
+        return $this->extension_status === ExtensionStatus::confirming->value;
+    }
+
     public function isExtensionRequested(): bool {
         return $this->extension_status === ExtensionStatus::confirming->value
             || $this->extension_status === ExtensionStatus::approved->value;
+    }
+
+    public function payment(): Payment 
+    {
+        return $this->payments()
+            ->where('name', PaymentName::reservation->value)
+            ->first();
     }
 }

@@ -178,7 +178,7 @@ class ReservationProcess extends Component
     {
         $this->no_of_people = $no_of_people;
         $quantity = max(0, $no_of_people - $this->summary_details['max_people']);
-        $this->selected_addons[$this->add_person_addon_id]['quantity'] = $quantity;
+        if ($quantity > 0) $this->selected_addons[$this->add_person_addon_id]['quantity'] = $quantity;
         
         $this->computeTotal();
     }

@@ -1,4 +1,4 @@
-<div>
+<div x-data="{isChecked: false}">
     <div class="h-fit p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Package'" />
         <div class="flex items-start gap-10">
@@ -139,12 +139,71 @@
             
         </div>
     </div>
+
+    {{-- Payments --}}
+    <div x-data="{ show: false, selectedPayment: @entangle('selectedPayment') }">
+        <div class="{{ $reservation->extension_status == \App\Enums\ExtensionStatus::confirming->value
+                            ? '' 
+                            : 'hidden' }} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
+            <div>
+                <x-card-title :value="'Select Payment Method'" />
+                <div class="flex items-center">
+                    <div class="flex h-5 items-center">
+                      <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" @click="isChecked = ! isChecked">
+                    </div>
+                    <x-terms />
+                </div>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
+                        <input 
+                            x-model="selectedPayment" 
+                            @click="show = false"
+                            type="radio" 
+                            name="payment-choice" 
+                            value="{{\App\Enums\PaymentType::cod->value}}" 
+                            class="sr-only" 
+                            aria-labelledby="size-choice-2-label">
+                        <span id="size-choice-2-label">Cash on Delivery (COD)</span>
+                        <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::cod->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
+                    </label>
+                    <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
+                        <input 
+                            x-model="selectedPayment" 
+                            @click="show = ! show"
+                            type="radio" 
+                            name="payment-choice" 
+                            value="{{\App\Enums\PaymentType::paypal->value}}" 
+                            class="sr-only" 
+                            aria-labelledby="size-choice-2-label">
+                        <span id="size-choice-2-label">PayPal</span>
+                        <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::paypal->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="mt-6" :class="isChecked && show || 'hidden'" wire:ignore>
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Total'" />
         <x-price :value="$total" />
-        <div class="{{ $show_cancel_reservation ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
+
         {{-- Rebook --}}
-        <x-button class="{{ $show_cancel_reservation ? 'hidden' : '' }} bg-yellow-600 font-bold" wire:click=rebook()>Rebook</x-button>
+        @if ($reservation->isExtensionOpen())
+            <div class="{{ $show_cancel_reservation ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
+
+            <x-button class="{{ $show_cancel_reservation ? 'hidden' : '' }} bg-yellow-600 font-bold" wire:click=rebook()>Rebook</x-button>
+        @endif
+
+        {{-- Extend --}}
+        @if ($reservation->isExtensionConfirming()
+            && $selectedPayment == \App\Enums\PaymentType::cod->value)
+            <div class="{{ $show_cancel_reservation ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
+
+            <x-button class="{{ $show_cancel_reservation ? 'hidden' : '' }} bg-yellow-600 font-bold" wire:click=extend()>Extend</x-button>
+        @endif
 
         {{-- Calendar --}}
         @if ($show_calendar)
@@ -174,48 +233,89 @@
     <a id="receipt-link" class="hidden" href="{{asset('storage/' . $reservation->receipt_path)}}" target="_blank"></a>
 </div>
 
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
-<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script>
-    let nextWeekTime = new Date().getTime() + 7 * 24 * 60 * 60 *1000;
-    let disabledDates = [];
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+@endpush
 
-    document.addEventListener("DOMContentLoaded", () => {
-        Livewire.hook('message.processed', (el, component) => {
-            disabledDates = @this.disabledDates;
-        })
-    });
-    
-    window.addEventListener('calendar-visible', event => {
-        var picker = new Pikaday({
-            field: document.getElementById('reserved_date'),
-            firstDay: 0, /* start with Sunday */
-            defaultDate: new Date(nextWeekTime),
-            minDate: new Date(nextWeekTime),
-            maxDate: new Date(2022, 12, 31),
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AWFlRJqqlVBzhfQZcNZv8OyfkRAH7jFGcGIYq2Zs1jQP-oOgIAeXpKju6viuf8Aqu--ilfUTk1LfAhBo&currency=PHP"></script>
+    <script>
+        let nextWeekTime = new Date().getTime() + 7 * 24 * 60 * 60 *1000;
+        let disabledDates = [];
 
-            disableDayFn: function (date) {
-                let formattedDate = moment(date).format('MM/DD/YYYY');
-                return disabledDates.includes(formattedDate);
-            },
-
-            onSelect: function(date) {
-                var datePicker = document.getElementById('reserved_date');
-                datePicker.value = moment(date).format('Do MMMM YYYY');
-                Livewire.emit('datePickerPicked', datePicker.value);
-            }
+        document.addEventListener("DOMContentLoaded", () => {
+            Livewire.hook('message.processed', (el, component) => {
+                disabledDates = @this.disabledDates;
+            })
         });
-    })
-    
-    window.addEventListener('reservation-updated', event => {
-        window.location.reload();
-        alert("Reservation has been successfully rebooked.");
-        document.getElementById('receipt-link').click();
-    })
-    
-    window.addEventListener('reservation-deleted', event => {
-        window.location.reload();
-        alert("Reservation has been successfully cancelled.");
-    })
-</script>
+        
+        window.addEventListener('calendar-visible', event => {
+            var picker = new Pikaday({
+                field: document.getElementById('reserved_date'),
+                firstDay: 0, /* start with Sunday */
+                defaultDate: new Date(nextWeekTime),
+                minDate: new Date(nextWeekTime),
+                maxDate: new Date(2022, 12, 31),
+
+                disableDayFn: function (date) {
+                    let formattedDate = moment(date).format('MM/DD/YYYY');
+                    return disabledDates.includes(formattedDate);
+                },
+
+                onSelect: function(date) {
+                    var datePicker = document.getElementById('reserved_date');
+                    datePicker.value = moment(date).format('Do MMMM YYYY');
+                    Livewire.emit('datePickerPicked', datePicker.value);
+                }
+            });
+        })
+        
+        window.addEventListener('reservation-updated', event => {
+            window.location.reload();
+            alert("Reservation has been successfully rebooked.");
+            document.getElementById('receipt-link').click();
+        })
+        
+        window.addEventListener('reservation-deleted', event => {
+            window.location.reload();
+            alert("Reservation has been successfully cancelled.");
+        })
+
+        window.addEventListener('reservation-extended', event => {
+            if(alert(event.detail.accommodation + " has been successfully extended.")){}
+            else {
+                window.location.reload();
+            }
+        })
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            paypal.Buttons({    
+                style: {
+                    layout: "vertical",
+                    color: "blue",
+                    shape: "pill",
+                    label: "pay",
+                },
+                createOrder: function (data, actions) {
+                    return actions.order.create({
+                        purchase_units: [
+                        {
+                            amount: {
+                            value: @this.package['rate'] / 100,
+                            },
+                        },
+                        ],
+                    });
+                },
+                onApprove: function (data, actions) {
+                    return actions.order.capture().then(function (details) {
+                        window.livewire.emit('extend')
+                    });
+                },
+            }).render('#paypal-button-container');
+        });
+    </script>
+@endpush
