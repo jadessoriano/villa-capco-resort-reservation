@@ -36,10 +36,10 @@ return [
     'pdf' => [
         'enabled' => true,
         // Uncomment below if the OS is linux-based.
-        'binary' => base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'),
+        // 'binary' => base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'),
         // Uncomment below if the OS is windows.
         // Note: Be sure to install the `wkhtmltopdf` from https://wkhtmltopdf.org/downloads.html.
-        // 'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf"',
+        'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf"',
         'timeout' => false,
         'options' => ['enable-local-file-access' => true],
         'env'     => [],

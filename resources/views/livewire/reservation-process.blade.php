@@ -316,15 +316,13 @@
                         purchase_units: [
                         {
                             amount: {
-                            value: 1, // {{ $total }} pa replace na lang niyan kung need, laki ng value eh baka maubos agad yung laman ng account
+                            value: @this.total / 100, // {{ $total }} pa replace na lang niyan kung need, laki ng value eh baka maubos agad yung laman ng account
                             },
                         },
                         ],
                     });
                 },
                 onApprove: function (data, actions) {
-                    console.log("Data :" + data);
-                    console.log("Action : " + actions);
                     return actions.order.capture().then(function (details) {
                         window.livewire.emit('reserve')
                     });
