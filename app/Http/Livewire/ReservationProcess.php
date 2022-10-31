@@ -178,7 +178,7 @@ class ReservationProcess extends Component
     {
         $this->no_of_people = $no_of_people;
         $quantity = max(0, $no_of_people - $this->summary_details['max_people']);
-        if ($quantity > 0) $this->selected_addons[$this->add_person_addon_id]['quantity'] = $quantity;
+        $this->selected_addons[$this->add_person_addon_id]['quantity'] = $quantity;
         
         $this->computeTotal();
     }
@@ -222,7 +222,13 @@ class ReservationProcess extends Component
             'reserved_date' => Carbon::parse($this->reserved_date),
             'catering_id' => $this->selected_catering_id
         ]);
-        $this->reservation->addons()->attach($this->selected_addons);        
+        $this->reservation
+            ->addons()
+            ->attach(
+                array_filter($this->selected_addons, function($item) {
+                    return $item['quantity'] != 0; 
+                })
+            );
 
         $this->payment();
 
