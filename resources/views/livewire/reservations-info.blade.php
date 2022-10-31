@@ -304,8 +304,7 @@
                         purchase_units: [
                         {
                             amount: {
-                            value: 1,
-                            // @this.package['rate'] / 100
+                            value: @this.package['rate'] / 100,
                             },
                         },
                         ],
