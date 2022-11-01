@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AddonResource\Pages;
 
+use App\Facades\Format;
 use App\Filament\Resources\AddonResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
@@ -9,4 +10,11 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateAddon extends CreateRecord
 {
     protected static string $resource = AddonResource::class;
+    
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['rate'] = Format::moneyForDatabase($data['rate']);
+
+        return $data;
+    }
 }

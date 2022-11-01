@@ -50,10 +50,10 @@ class AddonResource extends Resource
                     ]),
                 Forms\Components\FileUpload::make('image_path')
                     ->required()
-                    ->imagePreviewHeight(200)
                     ->directory('images/addons')
                     ->preserveFilenames()
                     ->image()
+                    ->imagePreviewHeight(200)
                     ->imageCropAspectRatio('16:9')
                     ->panelAspectRatio('2:1'),
             ]);
@@ -66,7 +66,7 @@ class AddonResource extends Resource
                 Tables\Columns\ImageColumn::make('image_path')
                     ->rounded()
                     ->size(150)
-                    ->url(fn (Addon $record): string => $record->image_path, true),
+                    ->url(fn (Addon $record): string => asset('storage/'.$record->image_path), true),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')

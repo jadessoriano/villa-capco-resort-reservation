@@ -10,6 +10,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Illuminate\Database\Eloquent\Model;
 
 class PackageResource extends Resource
 {
@@ -79,8 +80,28 @@ class PackageResource extends Resource
     {
         return [
             'index' => Pages\ListPackages::route('/'),
-            'create' => Pages\CreatePackage::route('/create'),
-            'edit' => Pages\EditPackage::route('/{record}/edit'),
+            // 'create' => Pages\CreatePackage::route('/create'),
+            // 'edit' => Pages\EditPackage::route('/{record}/edit'),
         ];
     }    
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return false;
+    }
 }

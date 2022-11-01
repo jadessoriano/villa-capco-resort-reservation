@@ -7,6 +7,7 @@ use App\Filament\Resources\CateringResource\Pages;
 use App\Filament\Resources\CateringResource\RelationManagers;
 use App\Models\Catering;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -35,7 +36,7 @@ class CateringResource extends Resource
                     ->placeholder(1_299)
                     ->prefix('₱')
                     ->numeric()
-                    ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
+                    ->mask(fn (TextInput\Mask $mask) => $mask
                         ->numeric()
                         ->decimalPlaces(2)
                         ->minValue(1)
@@ -62,10 +63,10 @@ class CateringResource extends Resource
                     ]),
                 Forms\Components\FileUpload::make('image_path')
                     ->required()
-                    ->imagePreviewHeight(200)
                     ->directory('images/addons') //TODO: change path to caterings.
                     ->preserveFilenames()
                     ->image()
+                    ->imagePreviewHeight(200)
                     ->imageCropAspectRatio('16:9')
                     ->panelAspectRatio('2:1'),
             ]);
@@ -78,7 +79,7 @@ class CateringResource extends Resource
                 Tables\Columns\ImageColumn::make('image_path')
                     ->rounded()
                     ->size(150)
-                    ->url(fn (Catering $record): string => $record->image_path, true),
+                    ->url(fn (Catering $record): string => asset('storage/'.$record->image_path), true),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
