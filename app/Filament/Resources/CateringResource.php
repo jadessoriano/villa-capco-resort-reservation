@@ -63,7 +63,7 @@ class CateringResource extends Resource
                     ]),
                 Forms\Components\FileUpload::make('image_path')
                     ->required()
-                    ->directory('images/addons') //TODO: change path to caterings.
+                    ->directory('images/caterings/')
                     ->preserveFilenames()
                     ->image()
                     ->imagePreviewHeight(200)

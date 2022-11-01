@@ -50,7 +50,7 @@ class AddonResource extends Resource
                     ]),
                 Forms\Components\FileUpload::make('image_path')
                     ->required()
-                    ->directory('images/addons')
+                    ->directory('images/addons/')
                     ->preserveFilenames()
                     ->image()
                     ->imagePreviewHeight(200)
