@@ -27,8 +27,9 @@ class AddonResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                    // ->required()
+                    // ->maxLength(255)
+                    ->disabled(),
                 Forms\Components\TextInput::make('rate')
                     ->required()
                     ->hint('Min: 1 - Max: 99,999')

@@ -24,8 +24,9 @@ class AccommodationResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                    // ->required()
+                    // ->maxLength(255)
+                    ->disabled(),
                 Forms\Components\TagsInput::make('details')
                     ->required()
                     ->separator(',')
