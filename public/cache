@@ -1,0 +1,4 @@
+<?php return array (
+  'reservation-process' => 'App\\Http\\Livewire\\ReservationProcess',
+  'reservations-info' => 'App\\Http\\Livewire\\ReservationsInfo',
+);
