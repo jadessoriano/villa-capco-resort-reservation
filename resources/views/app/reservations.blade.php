@@ -63,6 +63,11 @@
             </div>
         </div>
         <div class="w-2/3 m-5">
+            @auth
+                @if ($current_reservation)
+                    <livewire:reservations-info :current_reservation="$current_reservation" />
+                @endif
+            @endauth
             @guest
                 <x-card-title :value="'Fill out the user information first.'" />
             @endguest
