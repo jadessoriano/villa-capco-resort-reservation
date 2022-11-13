@@ -10,6 +10,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\Page;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,7 +31,7 @@ class AddonResource extends Resource
                 Forms\Components\TextInput::make('name')
                     // ->required()
                     // ->maxLength(255)
-                    ->disabled(),
+                    ->disabled(fn (Page $livewire) => $livewire instanceof EditRecord),
                 Forms\Components\TextInput::make('rate')
                     ->required()
                     ->hint('Min: 1 - Max: 99,999')

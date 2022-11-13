@@ -248,7 +248,11 @@
             && $selected_catering_id
             && $this->selectedPayment === \App\Enums\PaymentType::cod->value)
             <div class="border-l-2 border-primary-fg px-1 py-5"></div>
-            <x-button ::disabled="!isChecked" wire:click="reserve" wire:loading.remove>Reserve</x-button>
+            <x-button
+                id="reserve-btn"
+                ::disabled="!isChecked"
+                wire:loading.remove
+                onclick="document.getElementById('terms-label').click()">Reserve</x-button>
         @endif
 
         <button wire:loading wire:target="reserve">Processing...</button>
@@ -297,8 +301,12 @@
         window.addEventListener('reservation-created', event => {
             if(alert(event.detail.accommodation + " has been successfully reserved.")){}
             else {
-                document.getElementById('receipt-link').click();
-                window.location.reload();
+                // document.getElementById('receipt-link').click();
+                if (@this.selectedPayment === 'Cash On Delivery') {
+                    window.location.reload();
+                } else {
+                    window.location.href = 'terms-and-conditions';
+                }
             }
         })
     </script>
@@ -329,5 +337,17 @@
                 },
             }).render('#paypal-button-container');
         });
+    </script>
+    <script>
+        window.setInterval(function(){
+            let reserve_btn = document.getElementById('reserve-btn');
+            let modal_terms_footer = document.getElementById('modal-terms-footer');
+
+            if (reserve_btn === null) {
+                modal_terms_footer.style.display = "none";
+            } else {
+                modal_terms_footer.style.display = "block";
+            }
+        }, 500);
     </script>
 @endpush

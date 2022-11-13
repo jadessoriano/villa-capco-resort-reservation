@@ -9,6 +9,8 @@ use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\Page;
 use Filament\Tables;
 
 class AccommodationResource extends Resource
@@ -25,8 +27,8 @@ class AccommodationResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     // ->required()
-                    // ->maxLength(255)
-                    ->disabled(),
+                    // ->maxLength(255),
+                    ->disabled(fn (Page $livewire) => $livewire instanceof EditRecord),
                 Forms\Components\TagsInput::make('details')
                     ->required()
                     ->separator(',')

@@ -70,6 +70,10 @@ Route::get('/admin', function () {
     return redirect('/admin/accommodations');
 });
 
+Route::get('/terms-and-conditions', function () {
+    return view('app.terms');
+})->name('terms');
+
 Route::post('/extension/request', [ Controllers\ExtensionController::class, 'test'])
     ->name('guest.extension.request');
 
