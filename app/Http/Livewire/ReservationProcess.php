@@ -179,7 +179,9 @@ class ReservationProcess extends Component
         $this->no_of_people = $no_of_people;
         $quantity = max(0, $no_of_people - $this->summary_details['max_people']);
         $this->selected_addons[$this->add_person_addon_id]['quantity'] = $quantity;
-        
+
+        $this->summary_details['no_of_discount'] = 0;
+
         $this->computeTotal();
     }
 
@@ -220,7 +222,7 @@ class ReservationProcess extends Component
             'amount_to_pay' => $this->total,
             'mode_of_payment' => "Cash",
             'reserved_date' => Carbon::parse($this->reserved_date),
-            'catering_id' => $this->selected_catering_id
+            'catering_id' => empty($this->selected_catering_id) ? null : $this->selected_catering_id,
         ]);
         $this->reservation
             ->addons()
@@ -260,9 +262,9 @@ class ReservationProcess extends Component
             $this->total += $addon['quantity'] * $this->addons[$id]['rate'];
 
         // add catering package price.
-        if (empty($this->selected_catering_id)) return;
+        // if (empty($this->selected_catering_id)) return;
 
-        $this->total += $this->caterings[$this->selected_catering_id]['rate'];
+        if ($this->selected_catering_id) $this->total += $this->caterings[$this->selected_catering_id]['rate'];
 
         // discount
         $this->applyDiscount();

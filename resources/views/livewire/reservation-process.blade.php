@@ -177,6 +177,11 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            <div class="m-2">
+                                <x-button id="default-catering" class="w-full flex flex-col" wire:click="selectCatering('')">
+                                    <p class="text-white text-md font-bold">Select a Catering</p>
+                                </x-button>
+                            </div>
                             @foreach ($caterings as $id=>$catering)
                                 <div class="m-2">
                                     <x-button id="{{$catering['name']}}" class="w-full flex flex-col" wire:click="selectCatering({{$id}})">
@@ -194,10 +199,9 @@
 
     {{-- Payments --}}
     <div x-data="{ show: false, selectedPayment: @entangle('selectedPayment') }">
-        <div class="{{ $no_of_people > 0 
-                        && $reserved_date != null 
-                        && $selected_catering_id
-                            ? '' 
+        <div class="{{ $no_of_people > 0
+                        && $reserved_date != null
+                            ? ''
                             : 'hidden' }} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
             <div>
                 <x-card-title :value="'Select Payment Method'" />
@@ -243,9 +247,8 @@
     <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Total'" />
         <x-price :value="$total" />
-        @if ($no_of_people > 0 
-            && $reserved_date != null 
-            && $selected_catering_id
+        @if ($no_of_people > 0
+            && $reserved_date != null
             && $this->selectedPayment === \App\Enums\PaymentType::cod->value)
             <div class="border-l-2 border-primary-fg px-1 py-5"></div>
             <x-button
