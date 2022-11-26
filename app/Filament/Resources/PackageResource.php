@@ -20,6 +20,8 @@ class PackageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
+    protected static ?string $navigationLabel = 'Event';
+
     public static function form(Form $form): Form
     {
         return $form

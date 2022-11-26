@@ -37,7 +37,7 @@ class ReservationResource extends Resource
                     ->size(150),
                 Tables\Columns\TextColumn::make('transaction_no'),
                 Tables\Columns\TextColumn::make('accommodation.name'),
-                Tables\Columns\TextColumn::make('package.name'),
+                Tables\Columns\TextColumn::make('package.name')->label('Event'),
                 Tables\Columns\TextColumn::make('user.email'),
                 Tables\Columns\BadgeColumn::make('status.name')
                     ->colors([
@@ -46,7 +46,7 @@ class ReservationResource extends Resource
                         'danger' => 'Cancelled',
                         'success' => 'Done',
                     ]),
-                Tables\Columns\TextColumn::make('no_of_people'),
+                Tables\Columns\TextColumn::make('no_of_people')->label('No of person'),
                 Tables\Columns\TextColumn::make('amount_to_pay')
                     ->money('php'),
                 Tables\Columns\TextColumn::make('mode_of_payment'),
