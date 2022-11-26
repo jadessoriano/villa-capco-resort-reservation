@@ -5,6 +5,7 @@
             Looking for elegant yet affordable venue. Perfect venue for Corporate events and private occasions.
             Express the youthful soul inside you and enjoy the amazing treats that villa capco prepare for you.
         </p>
+        <a href="/reservations"><x-button>Book Now</x-button></a>
     </div>
 
     <article class="mx-20 my-5 bg-primary-bg border rounded-lg overflow-hidden">

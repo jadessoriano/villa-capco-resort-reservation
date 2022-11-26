@@ -1,5 +1,5 @@
 <div class="ml-1 text-sm" x-data="{ open: false }">
-  <label for="terms" class="font-medium">I have read and agree to the <span class="ml-1 text-secondary-fg hover:text-primary-fg cursor-pointer" @click="open = !open">Terms and Condition</span></label>
+  <label for="terms" class="font-medium">I have read and agree to the <span id="terms-label" class="ml-1 text-secondary-fg hover:text-primary-fg cursor-pointer" @click="open = !open">Terms and Condition</span></label>
   <div class="relative z-50" x-show="open" @click="open = false">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
     <div class="fixed inset-0 z-50 overflow-y-auto">
@@ -81,8 +81,11 @@
                         </p>
                     </div>
                     <!-- Modal footer -->
-                    <div class="flex justify-end items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button type="button" class="text-white bg-secondary-bg font-medium rounded-lg text-sm px-5 py-2.5 text-center" @click="open = false">Close</button>
+                    <div id="modal-terms-footer" class="flex justify-end items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
+                      <x-button
+                      ::disabled="!isChecked"
+                      wire:loading.remove
+                      wire:click="reserve">Confirm</x-button>
                     </div>
                 </div>
             </div>

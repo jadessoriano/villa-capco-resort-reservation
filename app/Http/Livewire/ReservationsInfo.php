@@ -145,16 +145,10 @@ class ReservationsInfo extends Component
 
     private function computeTotal()
     {
-        $this->total = $this->package['rate'];
-        // TODO: Add condition for id if add_person_addon_id then create global var for excess_people
-        /**
-         * The $this->addons here does not have to be attached to reservation since
-         * the data are static and only needed to be displayed.
-         */
-        foreach ($this->addons as $addon)
-            $this->total += $addon['quantity'] * $addon['rate'];
-
-        $this->total += $this->catering->rate;
+        foreach($this->reservation->payments as $payment)
+        {
+            $this->total += $payment->amount_to_pay;
+        }
     }
 
     private function collectReservedDates()

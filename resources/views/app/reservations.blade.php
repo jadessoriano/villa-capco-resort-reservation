@@ -65,9 +65,9 @@
         <div class="w-2/3 m-5">
             @auth
                 @if ($current_reservation)
-                    @livewire('reservations-info', compact('current_reservation'))
+                    <livewire:reservations-info :current_reservation="$current_reservation" />
                 @else
-                    @livewire('reservation-process', ['accommodation_id' => $accommodation_id, 'package_id' => $package_id])
+                    <livewire:reservation-process :accommodation_id="$accommodation_id" :package_id="$package_id" />
                 @endif
             @endauth
             @guest

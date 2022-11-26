@@ -22,13 +22,13 @@ class FaqResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextArea::make('question')
+                Forms\Components\Textarea::make('question')
                     ->required()
                     ->maxLength(65_535)
                     ->columnSpan([
                         'sm' => 2
                     ]),
-                Forms\Components\TextArea::make('answer')
+                Forms\Components\Textarea::make('answer')
                     ->required()
                     ->maxLength(65_535)
                     ->columnSpan([
