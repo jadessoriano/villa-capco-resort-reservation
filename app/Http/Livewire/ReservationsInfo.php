@@ -130,11 +130,13 @@ class ReservationsInfo extends Component
 
     public function cancelReservation()
     {
+        if (!$this->reservation->isCancelable()) return $this->dispatchBrowserEvent('reservation-not-cancellable');
+
         if ($this->show_cancel_reservation == false) {
             $this->show_cancel_reservation = true;
             return;
         }
-        
+
         $this->reservation->update([
             'reserved_date' => null,
             'status_id' => Status::where('name', 'Cancelled')->pluck('id')->first()

@@ -47,6 +47,7 @@ class ReservationProcess extends Component
 
     public string $selectedPayment = '';
 
+    public bool $discountable = false;
     public const DISCOUNT_VALUE = 20;
 
     protected $listeners = [
@@ -185,10 +186,8 @@ class ReservationProcess extends Component
         $this->computeTotal();
     }
 
-    public function numberOfDiscountChanged($no_of_people): void
+    public function updatedDiscountable($value): void
     {
-        $this->summary_details['no_of_discount'] = $no_of_people;
-
         $this->computeTotal();
     }
 
@@ -272,11 +271,11 @@ class ReservationProcess extends Component
 
     private function applyDiscount(): void
     {
-        if ($this->summary_details['no_of_discount'] == 0) return;
-        
+        if (!$this->discountable) return;
+
         $format = new Format();
 
-        $discount = $format->moneyForDisplay($this->total) / ($this->summary_details['no_of_discount'] * self::DISCOUNT_VALUE);
+        $discount = $format->moneyForDisplay($this->total) / self::DISCOUNT_VALUE;
 
         $this->total -= $format->moneyForDatabase($discount);
     }

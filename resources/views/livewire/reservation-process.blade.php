@@ -147,9 +147,9 @@
             {{-- Discount Seniors / PWD --}}
             @if ($summary_details)
             <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
-                <x-label for="no_of_discount" :value="(self::DISCOUNT_VALUE . __('% Discount'))" class="block text-right text-primary-fg text-xs" />
-                <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" name="no_of_discount" wire:change="numberOfDiscountChanged($event.target.value)">
-                <x-label for="no_of_discount" :value="__('Seniors / PWD')" class="inline pl-2" />
+                <x-label for="discountable" :value="(self::DISCOUNT_VALUE . __('% Discount'))" class="block text-right text-primary-fg text-xs" />
+                <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" wire:model="discountable" name="discountable">
+                <x-label for="discountable" :value="__('Seniors / PWD')" class="inline pl-2" />
             </div>
             @endif
             {{-- Reserved Date --}}
