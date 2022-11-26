@@ -38,7 +38,7 @@
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->reserved_date?->format('D M j, Y')" /></td>
                                 </tr>
                                 <tr>
-                                    <th class="pt-3">No. of People</th>
+                                    <th class="pt-3">No. of Person</th>
                                     <th class="pt-3">Rate</th>
                                 </tr>
                                 <tr>
@@ -164,7 +164,7 @@
                             value="{{\App\Enums\PaymentType::cod->value}}" 
                             class="sr-only" 
                             aria-labelledby="size-choice-2-label">
-                        <span id="size-choice-2-label">Cash on Delivery (COD)</span>
+                        <span id="size-choice-2-label">Cash</span>
                         <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::cod->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
                     </label>
                     <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
@@ -217,16 +217,14 @@
         @endif
 
         {{-- Cancel Reservation --}}
-        @if ($reservation->isCancelable())
-            <div class="{{ $show_calendar ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
-            <x-button class="{{ $show_cancel_reservation || $show_calendar ? 'hidden' : '' }} bg-red-500 font-bold"
-                wire:click=cancelReservation()>Cancel Reservation</x-button>
+        <div class="{{ $show_calendar ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
+        <x-button class="{{ $show_cancel_reservation || $show_calendar ? 'hidden' : '' }} bg-red-500 font-bold"
+            wire:click=cancelReservation()>Cancel Reservation</x-button>
 
-            {{-- Confirmation Button --}}
-            @if ($show_cancel_reservation)
-                <x-button class="bg-green-700 font-bold" wire:click=cancelReservation()>Proceed</x-button>
-                <x-button class="bg-red-500 font-bold" wire:click=hideCancelReservation()>Cancel</x-button>
-            @endif
+        {{-- Confirmation Button --}}
+        @if ($show_cancel_reservation)
+            <x-button class="bg-green-700 font-bold" wire:click=cancelReservation()>Proceed</x-button>
+            <x-button class="bg-red-500 font-bold" wire:click=hideCancelReservation()>Cancel</x-button>
         @endif
     </div>
 
@@ -282,6 +280,10 @@
         window.addEventListener('reservation-deleted', event => {
             window.location.reload();
             alert("Reservation has been successfully cancelled.");
+        })
+
+        window.addEventListener('reservation-not-cancellable', event => {
+            alert("Reservation cannot be canceled.");
         })
 
         window.addEventListener('reservation-extended', event => {

@@ -86,7 +86,7 @@
                                         </tr>
                                         <tr>
                                             <th class="pt-3">Schedule</th>
-                                            <th class="pt-3 pl-3">Max People</th>
+                                            <th class="pt-3 pl-3">Max Person</th>
                                             <th class="pt-3 pl-3">Rate</th>
                                         </tr>
                                         <tr>
@@ -140,16 +140,16 @@
             {{-- No of People --}}
             @if ($summary_details)
                 <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
-                    <x-label for="no_of_people" :value="__('No. of people')" class="inline  pl-2" />
+                    <x-label for="no_of_people" :value="__('No. of person')" class="inline  pl-2" />
                     <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min="1" name="no_of_people" :value="old('no_of_people')" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
                 </div>
             @endif
-            {{-- No of Seniors / PWD --}}
+            {{-- Discount Seniors / PWD --}}
             @if ($summary_details)
             <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
                 <x-label for="no_of_discount" :value="(self::DISCOUNT_VALUE . __('% Discount'))" class="block text-right text-primary-fg text-xs" />
-                <x-label for="no_of_discount" :value="__('No. of Seniors / PWD')" class="inline  pl-2" />
-                <x-input id="no_of_discount" class="inline w-[50px] py-0 px-1" type="number" min="0" name="no_of_discount" :value="old('no_of_discount')" :max="$this->no_of_people" wire:change="numberOfDiscountChanged($event.target.value)" autofocus />
+                <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" name="no_of_discount" wire:change="numberOfDiscountChanged($event.target.value)">
+                <x-label for="no_of_discount" :value="__('Seniors / PWD')" class="inline pl-2" />
             </div>
             @endif
             {{-- Reserved Date --}}
@@ -221,7 +221,7 @@
                             value="{{\App\Enums\PaymentType::cod->value}}" 
                             class="sr-only" 
                             aria-labelledby="size-choice-2-label">
-                        <span id="size-choice-2-label">Cash on Delivery (COD)</span>
+                        <span id="size-choice-2-label">Cash</span>
                         <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::cod->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
                     </label>
                     <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
