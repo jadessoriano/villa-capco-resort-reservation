@@ -80,6 +80,8 @@ Route::post('/extension/request', [ Controllers\ExtensionController::class, 'tes
 Route::post('newsletter/subscribe', [ Controllers\NewsletterController::class, 'subscribe'])
     ->name('newsletter.subscribe');
 
+Route::get('/calendar', [Controllers\CalendarController::class, 'index'])->name('calendar');
+
 Route::middleware('auth')->group(function () {
     /*
      * Guest (customer) routes.

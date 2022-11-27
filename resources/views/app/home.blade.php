@@ -5,7 +5,11 @@
             Looking for elegant yet affordable venue. Perfect venue for Corporate events and private occasions.
             Express the youthful soul inside you and enjoy the amazing treats that villa capco prepare for you.
         </p>
-        <a href="/reservations"><x-button>Book Now</x-button></a>
+        @if (auth()->user())
+            <a href="reservations"><x-button>Book Now</x-button></a>
+        @else
+            <x-button onclick="confirmation()">Book Now</x-button>
+        @endif
     </div>
 
     <article class="mx-20 my-5 bg-primary-bg border rounded-lg overflow-hidden">
@@ -92,4 +96,33 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+              var calendarEl = document.getElementById('calendar');
+
+              var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+              });
+
+              calendar.render();
+            });
+        </script>
+        <script type="text/javascript">
+            function confirmation() {
+                if (confirm('Do you want to view the calendar first?')) 
+                {
+                    window.location.href = "calendar";
+                } else {
+                    window.location.href = "reservations";
+                }
+            }
+        </script>
+    @endpush
 </x-app-layout>
