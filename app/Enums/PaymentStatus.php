@@ -6,4 +6,5 @@ enum PaymentStatus:string
 {
     case unpaid = 'Unpaid';
     case paid = 'Paid';
+    case partial = 'Partially Paid';
 }

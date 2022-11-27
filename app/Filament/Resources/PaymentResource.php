@@ -33,6 +33,7 @@ class PaymentResource extends Resource
                     ->required()
                     ->options([
                         Enums\PaymentStatus::paid->value => Enums\PaymentStatus::paid->value,
+                        Enums\PaymentStatus::partial->value => Enums\PaymentStatus::partial->value,
                         Enums\PaymentStatus::unpaid->value => Enums\PaymentStatus::unpaid->value,
                     ]),
             ]);

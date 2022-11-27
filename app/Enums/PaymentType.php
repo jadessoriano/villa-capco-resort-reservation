@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum PaymentType:string
 {
-    case cod = 'Cash On Delivery';
+    case cod = 'Cash';
     case paypal = 'Paypal';
 }

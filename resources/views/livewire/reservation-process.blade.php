@@ -305,7 +305,7 @@
             if(alert(event.detail.accommodation + " has been successfully reserved.")){}
             else {
                 // document.getElementById('receipt-link').click();
-                if (@this.selectedPayment === 'Cash On Delivery') {
+                if (@this.selectedPayment === 'Cash') {
                     window.location.reload();
                 } else {
                     window.location.href = 'terms-and-conditions';
