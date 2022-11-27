@@ -33,6 +33,7 @@ class ReservationsInfo extends Component
 
     public ?Package $extendedPackage = null;
     public ?Carbon $extendedDate = null;
+    public string $extendedHours = '0';
     public ?Catering $catering = null;
 
     public bool $isNextSlotPackageForExtensionAvailable = false;
@@ -208,7 +209,7 @@ class ReservationsInfo extends Component
         $payment->status = $this->selectedPayment === Enums\PaymentType::cod->value
             ? Enums\PaymentStatus::unpaid->value
             : Enums\PaymentStatus::paid->value;
-        $payment->amount_to_pay = $this->package['rate'];
+        $payment->amount_to_pay = ($this->reservation->extended_hours * 500) * 100;
         
         $payment->save();
 

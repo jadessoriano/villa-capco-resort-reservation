@@ -86,7 +86,8 @@ class Reservation extends Model
         'reserved_date',
         'qr_code_path',
         'receipt_path',
-        'catering_id'
+        'catering_id',
+        'extended_hours'
     ];
 
     /**
@@ -98,6 +99,8 @@ class Reservation extends Model
         'no_of_people' => 'integer',
         'amount_to_pay' => 'integer',
         'reserved_date' => 'date',
+        'extended_hours' => 'integer',
+        'extension_date' => 'date',
     ];
 
     /**

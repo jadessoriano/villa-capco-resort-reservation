@@ -7,6 +7,7 @@ use App\Events\ReservationCreated;
 use App\Models\Accommodation;
 use App\Models\Addon;
 use App\Models\Catering;
+use App\Models\Package;
 use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\Status;
@@ -128,8 +129,8 @@ class ReservationProcess extends Component
 
     public function showSummary(int $package_id)
     {
-        $package = Accommodation::find($this->selected_accommodation_id)
-            ->packages()->wherePivot('package_id', $package_id)->first();
+        $accommodation = Accommodation::find($this->selected_accommodation_id);
+        $package = $accommodation->packages()->wherePivot('package_id', $package_id)->first();
         $this->selected_package_id = $package_id;
 
         $this->summary_details = [
@@ -143,14 +144,29 @@ class ReservationProcess extends Component
             'no_of_discount' => 0
         ];
 
-        $this->disabledDates = Reservation::where([
-                ['package_id', $package_id],
-                ['accommodation_id', $this->selected_accommodation_id],
+        $packageQuery = $package->name === Enums\PackageName::wholeDay->value ? $accommodation->packages->pluck('id')->toArray() : [$package_id];
+
+        $this->disabledDates = Reservation::whereIn('package_id', $packageQuery)
+            ->where([
                 ['reserved_date', '>=', Carbon::now()->addWeek()->toDateString()],
             ])
+            ->get()
             ->pluck('reserved_date')
             ->map(fn ($item) => $item->format('m/d/Y'))
             ->toArray();
+
+        $extensions = Reservation::whereIn('extended_package_id', $packageQuery)
+            ->where([
+                ['extension_status', Enums\ExtensionStatus::approved->value],
+                ['extension_date', '>=', Carbon::now()->addWeek()->toDateString()],
+            ])
+            ->whereNotNull('reserved_date')
+            ->get()
+            ->pluck('extension_date')
+            ->map(fn ($item) => $item->format('m/d/Y'))
+            ->toArray();
+
+        $this->disabledDates = array_merge($this->disabledDates, $extensions);
 
         $this->computeTotal();
     }

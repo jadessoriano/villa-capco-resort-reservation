@@ -14,6 +14,7 @@ class ExtensionController extends Controller
     {
         $reservation = Reservation::where('transaction_no', $request->reservationNumber)->first();
 
+        $reservation->extended_hours = $request->extendedHours;
         $reservation->extended_package_id = $request->extendedPackageId;
         $reservation->extension_status = ExtensionStatus::confirming->value;
         $reservation->extension_date = $request->extendedDate;

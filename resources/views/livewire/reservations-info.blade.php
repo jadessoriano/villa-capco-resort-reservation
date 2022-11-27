@@ -62,12 +62,15 @@
                                             && $this->isNextSlotPackageForExtensionAvailable)
                                             <form action="{{ route('guest.extension.request') }}" method="POST">
                                                 @csrf
+                                                <input wire:model="extendedHours" name="extendedHours" type="number" min="1" max="12" value="0" required>
                                                 <input name="reservationNumber" value="{{ $this->reservation->transaction_no }}" type="text" hidden>
                                                 <input name="extendedPackageId" value="{{ $this->extendedPackage->id }}" type="text" hidden>
                                                 <input name="extendedDate" value="{{ $this->extendedDate->format('Y-m-d') }}" type="text" hidden>
 
                                                 <x-button class="bg-green-600 font-bold" type="submit">REQUEST EXTENSION</x-button>
                                             </form>
+                                        @else
+                                            <x-tag class="mt-0 bg-secondary-bg" :value="$reservation?->extended_hours . ' hr/s'" />
                                         @endif 
                                     </td>
                                 </tr>

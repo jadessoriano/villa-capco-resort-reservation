@@ -42,6 +42,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('Null means no extension was requested.');
             $table->foreign('extended_package_id')->references('id')->on('packages');
+            $table->tinyInteger('extended_hours')->default(0);
             $table->date('extension_date')
                 ->nullable()
                 ->comment('Null means no extension was requested.');
