@@ -133,7 +133,12 @@ class PackagesRelationManager extends RelationManager
                     }),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['rate'] = Format::moneyForDatabase($data['rate']);
+
+                        return $data;
+                    }),
                 Tables\Actions\AttachAction::make()
                     ->preloadRecordSelect()
                     ->form(fn (AttachAction $action): array => [
@@ -168,7 +173,17 @@ class PackagesRelationManager extends RelationManager
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->mutateRecordDataUsing(function (array $data): array {
+                        $data['rate'] = Format::moneyForDisplay($data['rate']);
+
+                        return $data;
+                    })
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['rate'] = Format::moneyForDatabase($data['rate']);
+
+                        return $data;
+                    }),
                 Tables\Actions\DetachAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
