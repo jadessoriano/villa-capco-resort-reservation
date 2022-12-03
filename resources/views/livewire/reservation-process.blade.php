@@ -141,19 +141,20 @@
                 <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                     <x-label for="no_of_people" :value="__('No. of person')" class="inline pl-2" />
                     <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min="1" name="no_of_people" :value="old('no_of_people')" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
-                    <span class="block mt-1 pl-2 text-xs text-red-900">Note: Do not count 2-12 yr. old kids below 3ft.</span>
+                    <span class="block mt-1 pl-2 text-xs text-red-900">Note: Do not count 12 yr. old below kids under 3ft height.</span>
                 </div>
             @endif
             {{-- type of age --}}
             @if ($summary_details)
             <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                 <div>
-                    <x-label for="no_of_below_3ft" :value="__('No. of 12 yrs. old below 3ft.')" class="inline pl-2" />
-                    <x-input id="no_of_below_3ft" class="inline w-[120px] py-0 px-1" type="number" min="0" max="" name="" value="" wire:change="" required />
+                    <x-label for="no_of_below_3ft" :value="__('No. of kids (12 yrs below):')" class="block pl-2" />
+                    <x-label for="no_of_below_3ft" :value="__('Height under 3ft.')" class="inline pl-2" />
+                    <x-input wire:model="no_of_kids_below_three_feet" id="no_of_below_3ft" class="inline w-[120px] py-0 px-1" type="number" min="0" required />
                 </div>
                 <div>
-                    <x-label for="no_of_above_3ft" :value="__('No. of 12 yrs. old above 3ft.')" class="inline pl-2" />
-                    <x-input id="no_of_above_3ft" class="inline w-[120px] py-0 px-1" type="number" min="0" max="" name="" value="" wire:change="" required />
+                    <x-label for="no_of_above_3ft" :value="__('Height above 3ft.')" class="inline pl-2" />
+                    <x-input wire:model="no_of_kids_above_three_feet" id="no_of_above_3ft" class="inline w-[120px] py-0 px-1" type="number" min="0" :max="($no_of_people === 0 ? 0 : ($no_of_people - 1))" required />
                 </div>
             </div>
             @endif
@@ -324,6 +325,10 @@
                     window.location.href = 'terms-and-conditions';
                 }
             }
+        })
+
+        window.addEventListener('alert-message', event => {
+            alert(event.detail.messages);
         })
     </script>
     <script>

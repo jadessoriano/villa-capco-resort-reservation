@@ -74,5 +74,10 @@ class ReservationResource extends Resource
         return [
             'index' => Pages\ListReservations::route('/'),
         ];
-    }    
+    }
+    
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 }

@@ -139,6 +139,33 @@
                         </tbody>
                     </table>
                 </div>
+
+                {{-- Total Person --}}
+                <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
+                    <p>Total Person:</p>
+                    <table>
+                        <thead class="text-primary-fg text-left align-top">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><x-tag class="mt-0 bg-secondary-bg" value="Adults:" /></td>
+                                <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->number_of_adults" /></td>
+                            </tr>
+                            <tr>
+                                <td><x-tag class="mt-0 bg-secondary-bg" value="Kids:" /></td>
+                                <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->number_of_kids" /></td>
+                            </tr>
+                            <tr>
+                                <td><x-tag class="mt-0 bg-secondary-bg" value="(12 yrs old below) under 3ft:" /></td>
+                                <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->no_of_kids_below_three_feet" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
         </div>
