@@ -138,42 +138,42 @@
         <div class="{{$summary_details ? '' : 'hidden'}} flex gap-5 items-center" >
             {{-- No of People --}}
             @if ($summary_details)
-                <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
-                    <x-label for="no_of_people" :value="__('No. of person')" class="inline  pl-2" />
+                <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
+                    <x-label for="no_of_people" :value="__('No. of person')" class="inline pl-2" />
                     <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min="1" name="no_of_people" :value="old('no_of_people')" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
+                    <span class="block mt-1 pl-2 text-xs text-red-900">Note: Do not count 2-12 yr. old kids below 3ft.</span>
                 </div>
             @endif
             {{-- type of age --}}
             @if ($summary_details)
-            <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
-                <x-label for="discountable" :value="__('Type of Age')" class="block text-right text-primary-fg text-xs" />
+            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                 <div>
-                    <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" wire:model="" name="">
-                    <x-label for="age" :value="__('2-12 below')" class="inline pl-2" />
+                    <x-label for="no_of_below_3ft" :value="__('No. of 12 yrs. old below 3ft.')" class="inline pl-2" />
+                    <x-input id="no_of_below_3ft" class="inline w-[120px] py-0 px-1" type="number" min="0" max="" name="" value="" wire:change="" required />
                 </div>
                 <div>
-                    <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" wire:model="" name="">
-                    <x-label for="age" :value="__('13-above')" class="inline pl-2" />
+                    <x-label for="no_of_above_3ft" :value="__('No. of 12 yrs. old above 3ft.')" class="inline pl-2" />
+                    <x-input id="no_of_above_3ft" class="inline w-[120px] py-0 px-1" type="number" min="0" max="" name="" value="" wire:change="" required />
                 </div>
             </div>
             @endif
             {{-- Discount Seniors / PWD --}}
             @if ($summary_details)
-            <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                 <x-label for="discountable" :value="(self::DISCOUNT_VALUE . __('% Discount'))" class="block text-right text-primary-fg text-xs" />
                 <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" wire:model="discountable" name="discountable">
                 <x-label for="discountable" :value="__('Seniors / PWD')" class="inline pl-2" />
             </div>
             @endif
             {{-- Reserved Date --}}
-            <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                 <x-label for="reserved_date" :value="__('*should be at least one week ahead')" class="block text-right text-primary-fg text-xs" />
                 <x-label for="reserved_date" :value="__('Reservation date')" class="inline pl-2" />
                 <x-input id="reserved_date" class="inline w-fit py-0 px-1" :value="$reserved_date" required autofocus />
             </div>
 
             {{-- Catering --}}
-            <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                 <x-label for="reserved_date" :value="__('Catering Package')" class="inline pl-2" />
                 <div class="inline-block border-2 border-primary-fg w-fit px-2">
                     <x-dropdown align="left" width="48">
