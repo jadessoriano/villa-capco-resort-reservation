@@ -37,6 +37,8 @@ class ReservationProcess extends Component
     public $addons = [];
     public $caterings = [];
     public $no_of_people;
+    public $no_of_kids_above_three_feet = 0;
+    public $no_of_kids_below_three_feet = 0;
     public $reserved_date;
     public $total = 0;
     public $add_person_addon_id;
@@ -198,6 +200,7 @@ class ReservationProcess extends Component
         $this->selected_addons[$this->add_person_addon_id]['quantity'] = $quantity;
 
         $this->summary_details['no_of_discount'] = 0;
+        $this->no_of_kids_above_three_feet = 0;
 
         $this->computeTotal();
     }
@@ -228,12 +231,19 @@ class ReservationProcess extends Component
 
     public function reserve()
     {
+        if ($this->no_of_kids_above_three_feet >= $this->no_of_people)
+        {
+            return $this->dispatchBrowserEvent('alert-message', ['messages' => 'No. of kids above the height of 3ft. must not exceed the total person.']);
+        }
+
         $this->reservation = Reservation::create([
             'accommodation_id' => $this->selected_accommodation_id,
             'package_id' => $this->selected_package_id,
             'user_id' => auth()->user()->id,
             'status_id' => Status::where('name', 'Booked')->first()->id,
             'no_of_people' => $this->no_of_people,
+            'no_of_kids_above_three_feet' => $this->no_of_kids_above_three_feet !== '' ? $this->no_of_kids_above_three_feet : 0,
+            'no_of_kids_below_three_feet' => $this->no_of_kids_below_three_feet !== '' ? $this->no_of_kids_below_three_feet : 0,
             'amount_to_pay' => $this->total,
             'mode_of_payment' => "Cash",
             'reserved_date' => Carbon::parse($this->reserved_date),

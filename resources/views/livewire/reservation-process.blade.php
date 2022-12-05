@@ -103,7 +103,6 @@
                     </div>
                 @endif
             </div>
-
             {{-- Addons --}}
             <div class="mt-3 w-[400px]">
                 @if ($summary_details)
@@ -139,28 +138,43 @@
         <div class="{{$summary_details ? '' : 'hidden'}} flex gap-5 items-center" >
             {{-- No of People --}}
             @if ($summary_details)
-                <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
-                    <x-label for="no_of_people" :value="__('No. of person')" class="inline  pl-2" />
+                <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
+                    <x-label for="no_of_people" :value="__('No. of person')" class="inline pl-2" />
                     <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min="1" name="no_of_people" :value="old('no_of_people')" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
+                    <span class="block mt-1 pl-2 text-xs text-red-900">Note: Do not count 12 yr. old below kids under 3ft height.</span>
                 </div>
+            @endif
+            {{-- type of age --}}
+            @if ($summary_details)
+            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
+                <div>
+                    <x-label for="no_of_below_3ft" :value="__('No. of kids (12 yrs below):')" class="block pl-2" />
+                    <x-label for="no_of_below_3ft" :value="__('Height under 3ft.')" class="inline pl-2" />
+                    <x-input wire:model="no_of_kids_below_three_feet" id="no_of_below_3ft" class="inline w-[120px] py-0 px-1" type="number" min="0" required />
+                </div>
+                <div>
+                    <x-label for="no_of_above_3ft" :value="__('Height above 3ft.')" class="inline pl-2" />
+                    <x-input wire:model="no_of_kids_above_three_feet" id="no_of_above_3ft" class="inline w-[120px] py-0 px-1" type="number" min="0" :max="($no_of_people === 0 ? 0 : ($no_of_people - 1))" required />
+                </div>
+            </div>
             @endif
             {{-- Discount Seniors / PWD --}}
             @if ($summary_details)
-            <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                 <x-label for="discountable" :value="(self::DISCOUNT_VALUE . __('% Discount'))" class="block text-right text-primary-fg text-xs" />
                 <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" wire:model="discountable" name="discountable">
                 <x-label for="discountable" :value="__('Seniors / PWD')" class="inline pl-2" />
             </div>
             @endif
             {{-- Reserved Date --}}
-            <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                 <x-label for="reserved_date" :value="__('*should be at least one week ahead')" class="block text-right text-primary-fg text-xs" />
                 <x-label for="reserved_date" :value="__('Reservation date')" class="inline pl-2" />
                 <x-input id="reserved_date" class="inline w-fit py-0 px-1" :value="$reserved_date" required autofocus />
             </div>
 
             {{-- Catering --}}
-            <div class="inline-block border-2 border-primary-fg w-fit p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
                 <x-label for="reserved_date" :value="__('Catering Package')" class="inline pl-2" />
                 <div class="inline-block border-2 border-primary-fg w-fit px-2">
                     <x-dropdown align="left" width="48">
@@ -213,25 +227,25 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4 mt-4">
                     <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
-                        <input 
-                            x-model="selectedPayment" 
+                        <input
+                            x-model="selectedPayment"
                             @click="show = false"
-                            type="radio" 
-                            name="payment-choice" 
-                            value="{{\App\Enums\PaymentType::cod->value}}" 
-                            class="sr-only" 
+                            type="radio"
+                            name="payment-choice"
+                            value="{{\App\Enums\PaymentType::cod->value}}"
+                            class="sr-only"
                             aria-labelledby="size-choice-2-label">
                         <span id="size-choice-2-label">Cash</span>
                         <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::cod->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
                     </label>
                     <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
-                        <input 
-                            x-model="selectedPayment" 
+                        <input
+                            x-model="selectedPayment"
                             @click="show = ! show"
-                            type="radio" 
-                            name="payment-choice" 
-                            value="{{\App\Enums\PaymentType::paypal->value}}" 
-                            class="sr-only" 
+                            type="radio"
+                            name="payment-choice"
+                            value="{{\App\Enums\PaymentType::paypal->value}}"
+                            class="sr-only"
                             aria-labelledby="size-choice-2-label">
                         <span id="size-choice-2-label">PayPal</span>
                         <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::paypal->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
@@ -243,7 +257,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Total'" />
         <x-price :value="$total" />
@@ -300,7 +314,7 @@
                 disabledDates = @this.disabledDates;
             })
         });
-        
+
         window.addEventListener('reservation-created', event => {
             if(alert(event.detail.accommodation + " has been successfully reserved.")){}
             else {
@@ -312,10 +326,14 @@
                 }
             }
         })
+
+        window.addEventListener('alert-message', event => {
+            alert(event.detail.messages);
+        })
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            paypal.Buttons({    
+            paypal.Buttons({
                 style: {
                     layout: "vertical",
                     color: "blue",

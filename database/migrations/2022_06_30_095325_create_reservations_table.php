@@ -26,6 +26,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Status::class);
             $table->tinyInteger('no_of_people');
+            $table->tinyInteger('no_of_kids_above_three_feet')->default(0);
+            $table->tinyInteger('no_of_kids_below_three_feet')->default(0);
             $table->integer('amount_to_pay')
                   ->comment('Divide by 100 to get the exact amount in decimal value.');
             $table->string('mode_of_payment');

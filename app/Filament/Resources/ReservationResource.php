@@ -36,7 +36,8 @@ class ReservationResource extends Resource
                     ->rounded()
                     ->size(150),
                 Tables\Columns\TextColumn::make('transaction_no'),
-                Tables\Columns\TextColumn::make('accommodation.name'),
+                Tables\Columns\TextColumn::make('user.last_name')
+                    ->formatStateUsing(fn (Reservation $record): string => $record->user->getFullname()),
                 Tables\Columns\TextColumn::make('package.name')->label('Event'),
                 Tables\Columns\TextColumn::make('user.email'),
                 Tables\Columns\BadgeColumn::make('status.name')
@@ -74,5 +75,10 @@ class ReservationResource extends Resource
         return [
             'index' => Pages\ListReservations::route('/'),
         ];
-    }    
+    }
+    
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 }

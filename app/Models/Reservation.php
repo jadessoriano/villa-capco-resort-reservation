@@ -81,6 +81,8 @@ class Reservation extends Model
         'user_id',
         'status_id',
         'no_of_people',
+        'no_of_kids_above_three_feet',
+        'no_of_kids_below_three_feet',
         'amount_to_pay',
         'mode_of_payment',
         'reserved_date',
@@ -97,6 +99,8 @@ class Reservation extends Model
      */
     protected $casts = [
         'no_of_people' => 'integer',
+        'no_of_kids_above_three_feet' => 'integer',
+        'no_of_kids_below_three_feet' => 'integer',
         'amount_to_pay' => 'integer',
         'reserved_date' => 'date',
         'extended_hours' => 'integer',
@@ -206,5 +210,15 @@ class Reservation extends Model
         return $this->payments()
             ->where('name', PaymentName::reservation->value)
             ->first();
+    }
+
+    public function getNumberOfAdultsAttribute()
+    {
+        return $this->no_of_people - $this->no_of_kids_above_three_feet;
+    }
+
+    public function getNumberOfKidsAttribute()
+    {
+        return $this->no_of_kids_above_three_feet + $this->no_of_kids_below_three_feet;
     }
 }
