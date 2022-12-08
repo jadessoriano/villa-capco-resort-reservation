@@ -50,7 +50,7 @@ class ReservationResource extends Resource
                 Tables\Columns\TextColumn::make('no_of_people')->label('No of person'),
                 Tables\Columns\TextColumn::make('amount_to_pay')
                     ->money('php'),
-                Tables\Columns\TextColumn::make('mode_of_payment'),
+                // Tables\Columns\TextColumn::make('mode_of_payment'),
                 Tables\Columns\TextColumn::make('reserved_date')
                     ->date(),
                 Tables\Columns\TextColumn::make('created_at')
