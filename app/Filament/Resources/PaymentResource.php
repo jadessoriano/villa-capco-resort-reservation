@@ -43,8 +43,8 @@ class PaymentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('reservation_transaction_no')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('user')
+                    ->formatStateUsing(fn (Payment $record): string => $record->reservation->user->getFullname()),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\BadgeColumn::make('status')
@@ -54,6 +54,8 @@ class PaymentResource extends Resource
                     ]),
                 Tables\Columns\TextColumn::make('amount_to_pay')
                     ->money('php'),
+                 Tables\Columns\TextColumn::make('reservation_transaction_no')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')

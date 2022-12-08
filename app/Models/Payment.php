@@ -28,6 +28,6 @@ class Payment extends Model
 
     public function reservation(): BelongsTo
     {
-        return $this->belongsTo(Reservation::class, 'payment_id', 'transaction_no');
+        return $this->belongsTo(Reservation::class, 'reservation_transaction_no', 'transaction_no');
     }
 }
