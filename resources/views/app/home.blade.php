@@ -1,47 +1,39 @@
 <x-app-layout>
-    <div class="flex flex-col justify-center items-center gap-4 h-1/2-screen">
-        <x-application-logo class="block h-40 w-auto" />
+    <div class="flex flex-col justify-center items-center gap-4 h-1/2-screen mt-8 md:mt-0">
+        <x-application-logo class="block h-auto object-cover w-3/12 mt-8 md:mt-0 md:w-auto md:h-40" />
         <p class="text-center text-lg w-3/4 pt-5 border-t-4 border-secondary-fg">
             Looking for elegant yet affordable venue. Perfect venue for Corporate events and private occasions.
             Express the youthful soul inside you and enjoy the amazing treats that villa capco prepare for you.
         </p>
         @if (auth()->user())
-            <a href="reservations"><x-button>Book Now</x-button></a>
+            <a href="reservations" class="mb-8 md:mb-0"><x-button>Book Now</x-button></a>
         @else
-            <x-button onclick="confirmation()">Book Now</x-button>
+            <x-button class="mb-8 md:mb-0" onclick="confirmation()">Book Now</x-button>
         @endif
     </div>
-
-    <article class="mx-20 my-5 bg-primary-bg border rounded-lg overflow-hidden">
-        <img src="{{ asset('storage/images/accommodations/pool_1.jpg') }}" alt="First Pool" class="float-left object-cover w-[33.3333vw] h-auto mr-5">
-        <div class="mr-5 mt-3">
-            <h1 class="text-start text-2xl w-3/4 text-primary-fg font-bold pt-5">
-                The first Pool of Villa Capco
-            </h1>
-            <p class="text-start text-lg">
-                We started just like how any resorts did. We start from one pool until we reach where we are now.
-                The place was just right; not too far from the street to find and navigate but not too close so that 
-                visitors can still feel the freedom away from the busy city. Our first pool is our constant reminder
-                of our big vision with even greater passion. Where we are now started from that tiny little pool.
-            </p>
+    <article class="max-w-full mx-6 my-10 bg-primary-bg rounded-xl shadow-md overflow-hidden md:mx-20">
+        <div class="md:flex">
+            <div class="md:shrink-0">
+                <img class="h-48 w-full object-cover md:h-full md:w-[33.3333vw] lg:float-left" src="{{ asset('storage/images/accommodations/pool_1.jpg') }}" alt="First Pool">
+            </div>
+            <div class="p-8">
+                <div class="tracking-wide text-primary-fg font-bold text-start text-2xl w-3/4">The first Pool of Villa Capco</div>
+                <p class="mt-2 text-start text-lg">We started just like how any resorts did. We start from one pool until we reach where we are now. The place was just right; not too far from the street to find and navigate but not too close so that visitors can still feel the freedom away from the busy city. Our first pool is our constant reminder
+                    of our big vision with even greater passion. Where we are now started from that tiny little pool.</p>
+            </div>
         </div>
     </article>
-
-    <article class="mx-20 my-10 bg-primary-bg border rounded-lg overflow-hidden">
-        <img src="{{ asset('storage/images/addons/function_hall.jpg') }}" alt="Function Hall" class="float-right object-cover w-[33.3333vw] h-auto ml-5">
-        <div class="ml-5 mt-5">
-            <h1 class="text-end text-2xl w-3/4 text-primary-fg font-bold pt-5">
-                Our undying commitment
-            </h1>
-            <p class="text-end text-lg">
-                We believe that everyone has the right for affordable place to celebrate. Villa Capco caters those
-                people who would want the best of two worlds. Being gorgeous at the right expense. We commited our
-                passion and love for giving services to the people and making their moments memorable. We have the
-                right accommodations for you!
-            </p>
+    <article class="max-w-full mx-6 my-10 bg-primary-bg rounded-xl shadow-md overflow-hidden md:mx-20">
+        <div class="md:flex">
+            <div class="md:shrink-0 md:order-2">
+                <img class="h-48 w-full object-cover md:h-full md:w-[33.3333vw] lg:float-left" src="{{ asset('storage/images/addons/function_hall.jpg') }}" alt="Function Hall">
+            </div>
+            <div class="p-8 md:order-1">
+                <div class="tracking-wide text-primary-fg font-bold text-start text-2xl w-3/4">Our undying commitment</div>
+                <p class="mt-2 text-start text-lg">We believe that everyone has the right for affordable place to celebrate. Villa Capco caters those people who would want the best of two worlds. Being gorgeous at the right expense. We commited our passion and love for giving services to the people and making their moments memorable. We have the right accommodations for you!</p>
+            </div>
         </div>
     </article>
-
     <div class="flex flex-col justify-center items-center mt-20">
         <h1 class="text-center text-3xl w-3/4 font-bold border-b-2 pb-5 text-secondary-fg border-secondary-fg">
             What do People thinks about our Service?
@@ -61,7 +53,7 @@
                 </div>
             </article>
         @endforeach
-    </div>    
+    </div>
     <div class="flex justify-center items-center mt-20">
         <h1 class="mb-8 text-center text-3xl w-3/4 font-bold border-b-2 pb-5 text-secondary-fg border-secondary-fg">
             Company Profile
@@ -116,7 +108,7 @@
         </script>
         <script type="text/javascript">
             function confirmation() {
-                if (confirm('Do you want to view the calendar first?')) 
+                if (confirm('Do you want to view the calendar first?'))
                 {
                     window.location.href = "calendar";
                 } else {
