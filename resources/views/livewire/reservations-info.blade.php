@@ -1,8 +1,8 @@
 <div x-data="{isChecked: false}">
     <div class="h-fit p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Package'" />
-        <div class="flex items-start gap-10">
-            <div class="mt-3 max-w-md">
+        <div class="grid grid-cols-1 gap-5 lg:grid-cols-[repeat(2,_500px)]">
+            <div class="max-w-md">
                 {{-- Reservation Details --}}
                 <div class="flex items-start">
                     <div class="inline-block border-2 border-primary-fg w-fit p-3  mt-4">
@@ -25,37 +25,94 @@
                                     <th class="pt-3">Details</th>
                                 </tr>
                                 <tr>
-                                    <td colspan="2"><x-tag class="mt-0 bg-secondary-bg" :value="$accommodation->details" /></td>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$accommodation->details" /></td>
                                 </tr>
-                                <tr>
+                                <tr class="md:hidden">
+                                    <th class="pt-3">Schedule</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td>
+                                        <x-schedule class="mt-0" :start_time="$package['start_time']" :end_time="$package['end_time']" />
+                                    </td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="pt-3">Reserved Date</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->reserved_date?->format('D M j, Y')" /></td>
+                                </tr>
+                                <tr class="hidden md:block">
                                     <th class="pt-3">Schedule</th>
                                     <th class="pt-3">Reserved Date</th>
                                 </tr>
-                                <tr>
+                                <tr class="hidden md:block">
                                     <td>
                                         <x-schedule class="mt-0" :start_time="$package['start_time']" :end_time="$package['end_time']" />
                                     </td>
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->reserved_date?->format('D M j, Y')" /></td>
                                 </tr>
-                                <tr>
+                                <tr class="md:hidden">
+                                    <th class="pt-3">No. of Person</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->no_of_people" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="pt-3">Rate</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-price class="inline" :value="$package['rate']" /></td>
+                                </tr>
+                                <tr class="hidden md:block">
                                     <th class="pt-3">No. of Person</th>
                                     <th class="pt-3">Rate</th>
                                 </tr>
-                                <tr>
+                                <tr class="hidden md:block">
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->no_of_people" /></td>
                                     <td><x-price class="inline" :value="$package['rate']" /></td>
                                 </tr>
-                                <tr>
+                                <tr class="md:hidden">
+                                    <th class="pt-3">Extension (<span>{{ $this->reservation->extension_status ?? 'N/A' }}</span>)</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$extendedPackage->name" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td>
+                                        <x-schedule class="mt-0" :start_time="$extendedPackage->start_time" :end_time="$extendedPackage->end_time" />
+                                    </td>
+                                </tr>
+                                <tr class="hidden md:block">
                                     <th class="pt-3">Extension (<span>{{ $this->reservation->extension_status ?? 'N/A' }}</span>)</th>
                                     <th class="pt-3"></th>
                                 </tr>
-                                <tr>
+                                <tr class="hidden md:block">
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$extendedPackage->name" /></td>
                                     <td>
                                         <x-schedule class="mt-0" :start_time="$extendedPackage->start_time" :end_time="$extendedPackage->end_time" />
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="md:hidden">
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$extendedDate?->format('D M j, Y')" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td>
+                                        @if (! $this->reservation->isExtensionRequested()
+                                            && $this->isNextSlotPackageForExtensionAvailable)
+                                            <form action="{{ route('guest.extension.request') }}" method="POST">
+                                                @csrf
+                                                <input wire:model="extendedHours" name="extendedHours" type="number" min="1" max="12" value="0" required>
+                                                <input name="reservationNumber" value="{{ $this->reservation->transaction_no }}" type="text" hidden>
+                                                <input name="extendedPackageId" value="{{ $this->extendedPackage->id }}" type="text" hidden>
+                                                <input name="extendedDate" value="{{ $this->extendedDate->format('Y-m-d') }}" type="text" hidden>
+                                                <x-button class="bg-green-600 font-bold mt-3 md:mt-0" type="submit">REQUEST EXTENSION</x-button>
+                                            </form>
+                                        @else
+                                            <x-tag class="mt-0 bg-secondary-bg" :value="$reservation?->extended_hours . ' hr/s'" />
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr class="hidden md:block">
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$extendedDate?->format('D M j, Y')" /></td>
                                     <td>
                                         @if (! $this->reservation->isExtensionRequested()
@@ -71,7 +128,7 @@
                                             </form>
                                         @else
                                             <x-tag class="mt-0 bg-secondary-bg" :value="$reservation?->extended_hours . ' hr/s'" />
-                                        @endif 
+                                        @endif
                                     </td>
                                 </tr>
                             </tbody>
@@ -82,10 +139,10 @@
 
             <div class="mt-3 w-[400px]">
                 {{-- AddOns --}}
-                <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
+                <div class="block border-2 border-primary-fg w-fit mb-4 px-2 md:mb-0 md:mr-4 md:inline-block">
                     <p>Addons:</p>
                     @foreach ($addons as $id=>$addon)
-                        <div class="my-3 flex items-center gap-2">
+                        <div class="my-3 flex items-baseline gap-2">
                             @php
                                 $excess_people = 0;
                                 if ($id == $add_person_addon_id)
@@ -105,9 +162,9 @@
 
                 {{-- Catering --}}
                 @if ($this->catering)
-                    <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
+                    <div class="block border-2 border-primary-fg w-fit px-2 md:mr-4 md:inline-block">
                         <p>Catering Package:</p>
-                        <div class="my-3 flex items-center gap-2">
+                        <div class="my-3 flex items-baseline gap-2">
                             <div class="bg-secondary-bg rounded-lg text-white flex items-center">
                                 <x-price class="inline" :value="$this->catering->rate" />
                                 <x-tag class="mt-0 bg-secondary-bg" :value="$this->catering->name" />
@@ -116,11 +173,11 @@
                     </div>
                 @endif
                 {{-- Payment --}}
-                <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
+                <div class="block border-2 border-primary-fg w-fit px-2 mt-4 md:mr-4 md:mt-10 md:inline-block">
                     <p>Payments:</p>
                     <table>
                         <thead class="text-primary-fg text-left align-top">
-                            <tr>
+                            <tr class="hidden md:block">
                                 <th>Name</th>
                                 <th>Type</th>
                                 <th>Amount</th>
@@ -129,10 +186,34 @@
                         </thead>
                         <tbody>
                             @foreach($this->reservation->payments as $payment)
-                                <tr>
+                                <tr class="hidden md:block">
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->name->value" /></td>
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->type->value" /></td>
                                     <td><x-price class="inline" :value="$payment->amount_to_pay" /></td>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->status->value" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="text-left">Name</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->name->value" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="text-left">Type</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->type->value" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="text-left">Amount</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-price class="inline" :value="$payment->amount_to_pay" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="text-left">Status</th>
+                                </tr>
+                                <tr class="md:hidden">
                                     <td><x-tag class="mt-0 bg-secondary-bg" :value="$payment->status->value" /></td>
                                 </tr>
                             @endforeach
@@ -141,7 +222,7 @@
                 </div>
 
                 {{-- Total Person --}}
-                <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
+                <div class="block border-2 border-primary-fg w-fit px-2 mt-10 mr-4 md:inline-block">
                     <p>Total Person:</p>
                     <table>
                         <thead class="text-primary-fg text-left align-top">
@@ -151,30 +232,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr class="hidden md:block">
                                 <td><x-tag class="mt-0 bg-secondary-bg" value="Adults:" /></td>
-                                <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->number_of_adults" /></td>
+                                <td><x-tag class="mt-0 bg-secondary-fg" :value="$reservation->number_of_adults" /></td>
                             </tr>
-                            <tr>
+                            <tr class="hidden md:block">
                                 <td><x-tag class="mt-0 bg-secondary-bg" value="Kids:" /></td>
-                                <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->number_of_kids" /></td>
+                                <td><x-tag class="mt-0 bg-secondary-fg" :value="$reservation->number_of_kids" /></td>
                             </tr>
-                            <tr>
+                            <tr class="hidden md:block">
                                 <td><x-tag class="mt-0 bg-secondary-bg" value="(12 yrs old below) under 3ft:" /></td>
-                                <td><x-tag class="mt-0 bg-secondary-bg" :value="$reservation->no_of_kids_below_three_feet" /></td>
+                                <td><x-tag class="mt-0 bg-secondary-fg" :value="$reservation->no_of_kids_below_three_feet" /></td>
+                            </tr>
+                            <tr class="md:hidden">
+                                <td><x-tag class="mt-0 bg-secondary-bg" value="Adults:" /></td>
+                            </tr>
+                            <tr class="md:hidden">
+                                <td><x-tag class="mt-0 bg-secondary-fg" :value="$reservation->number_of_adults" /></td>
+                            </tr>
+                            <tr class="md:hidden">
+                                <td><x-tag class="mt-0 bg-secondary-bg" value="Kids:" /></td>
+                            </tr>
+                            <tr class="md:hidden">
+                                <td><x-tag class="mt-0 bg-secondary-fg" :value="$reservation->number_of_kids" /></td>
+                            </tr>
+                            <tr class="md:hidden">
+                                <td><x-tag class="mt-0 bg-secondary-bg" value="(12 yrs old below) under 3ft:" /></td>
+                            </tr>
+                            <tr class="md:hidden">
+                                <td><x-tag class="mt-0 bg-secondary-fg" :value="$reservation->no_of_kids_below_three_feet" /></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            
         </div>
     </div>
 
     {{-- Payments --}}
     <div x-data="{ show: false, selectedPayment: @entangle('selectedPayment') }">
         <div class="{{ $reservation->extension_status == \App\Enums\ExtensionStatus::confirming->value
-                            ? '' 
+                            ? ''
                             : 'hidden' }} h-fit mt-4 p-3 bg-primary-bg rounded-lg">
             <div>
                 <x-card-title :value="'Select Payment Method'" />
@@ -186,25 +284,25 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4 mt-4">
                     <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
-                        <input 
-                            x-model="selectedPayment" 
+                        <input
+                            x-model="selectedPayment"
                             @click="show = false"
-                            type="radio" 
-                            name="payment-choice" 
-                            value="{{\App\Enums\PaymentType::cod->value}}" 
-                            class="sr-only" 
+                            type="radio"
+                            name="payment-choice"
+                            value="{{\App\Enums\PaymentType::cod->value}}"
+                            class="sr-only"
                             aria-labelledby="size-choice-2-label">
                         <span id="size-choice-2-label">Cash</span>
                         <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::cod->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
                     </label>
                     <label :class="isChecked ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-50'" class="group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 bg-white shadow-sm text-gray-900 cursor-pointer">
-                        <input 
-                            x-model="selectedPayment" 
+                        <input
+                            x-model="selectedPayment"
                             @click="show = ! show"
-                            type="radio" 
-                            name="payment-choice" 
-                            value="{{\App\Enums\PaymentType::paypal->value}}" 
-                            class="sr-only" 
+                            type="radio"
+                            name="payment-choice"
+                            value="{{\App\Enums\PaymentType::paypal->value}}"
+                            class="sr-only"
                             aria-labelledby="size-choice-2-label">
                         <span id="size-choice-2-label">PayPal</span>
                         <span class="pointer-events-none absolute -inset-px rounded-md border-2" :class="selectedPayment == '{{\App\Enums\PaymentType::paypal->value}}' ? 'border-primary-fg' : 'border-transparent'" aria-hidden="true"></span>
@@ -217,13 +315,13 @@
         </div>
     </div>
 
-    <div class="flex justify-end items-center gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
+    <div class="flex justify-end items-center flex-wrap gap-3 h-fit mt-4 p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Total'" />
         <x-price :value="$total" />
 
         {{-- Rebook --}}
         @if ($reservation->isExtensionOpen())
-            <div class="{{ $show_cancel_reservation ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
+            <div class="{{ $show_cancel_reservation ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5 hidden sm:block"></div>
 
             <x-button class="{{ $show_cancel_reservation ? 'hidden' : '' }} bg-yellow-600 font-bold" wire:click=rebook()>Rebook</x-button>
         @endif
@@ -231,7 +329,7 @@
         {{-- Extend --}}
         @if ($reservation->isExtensionConfirming()
             && $selectedPayment == \App\Enums\PaymentType::cod->value)
-            <div class="{{ $show_cancel_reservation ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
+            <div class="{{ $show_cancel_reservation ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5 hidden sm:block"></div>
 
             <x-button class="{{ $show_cancel_reservation ? 'hidden' : '' }} bg-yellow-600 font-bold" wire:click=extend()>Extend</x-button>
         @endif
@@ -247,7 +345,7 @@
         @endif
 
         {{-- Cancel Reservation --}}
-        <div class="{{ $show_calendar ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5"></div>
+        <div class="{{ $show_calendar ? 'hidden' : '' }} border-l-2 border-primary-fg px-1 py-5 hidden sm:block"></div>
         <x-button class="{{ $show_cancel_reservation || $show_calendar ? 'hidden' : '' }} bg-red-500 font-bold"
             wire:click=cancelReservation()>Cancel Reservation</x-button>
 
@@ -279,7 +377,7 @@
                 disabledDates = @this.disabledDates;
             })
         });
-        
+
         window.addEventListener('calendar-visible', event => {
             var picker = new Pikaday({
                 field: document.getElementById('reserved_date'),
@@ -300,13 +398,13 @@
                 }
             });
         })
-        
+
         window.addEventListener('reservation-updated', event => {
             window.location.reload();
             alert("Reservation has been successfully rebooked.");
             document.getElementById('receipt-link').click();
         })
-        
+
         window.addEventListener('reservation-deleted', event => {
             window.location.reload();
             alert("Reservation has been successfully cancelled.");
@@ -325,7 +423,7 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            paypal.Buttons({    
+            paypal.Buttons({
                 style: {
                     layout: "vertical",
                     color: "blue",

@@ -128,8 +128,20 @@
         </div>
 
         <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('caterings')" :active="request()->routeIs('caterings')">
+                {{ __('Caterings') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('reservations')" :active="request()->routeIs('reservations')">
                 {{ __('Reservations') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('calendar')" :active="request()->routeIs('calendar')">
+                {{ __('Calendar') }}
             </x-responsive-nav-link>
         </div>
 

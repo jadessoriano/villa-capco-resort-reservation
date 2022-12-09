@@ -1,8 +1,8 @@
 <div x-data="{isChecked: false}">
     <div class="h-fit p-3 bg-primary-bg rounded-lg">
         <x-card-title :value="'Package'" />
-        <div class="flex items-start gap-10">
-            <div class="mt-3 max-w-md">
+        <div class="mt-3">
+            <div class="flex items-start flex-wrap gap-4">
                 {{-- Accommodations --}}
                 <div class="inline-block border-2 border-primary-fg w-fit px-2">
                     <x-dropdown align="left" width="48">
@@ -33,7 +33,7 @@
 
                 @if ($package_names)
                     {{-- Packages --}}
-                    <div class="inline-block border-2 border-primary-fg w-fit px-2 ml-4">
+                    <div class="inline-block border-2 border-primary-fg w-fit px-2 md:ml-4">
                         <x-dropdown align="left" width="48">
                             <x-slot name="trigger">
                                 <button class="flex items-center text-sm font-medium text-primary-fg hover:text-secondary-fg hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
@@ -58,87 +58,105 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
-
-                    {{-- Summary Details --}}
-                    <div class="flex items-start">
-                        @if ($summary_details)
-                            <div class="inline-block border-2 border-primary-fg w-fit p-3  mt-4">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th colspan="3"><x-card-subtitle :value="'Summary Details'" /></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-primary-fg text-left align-top">
-                                        <tr>
-                                            <th class="pr-2">Accommodation</th>
-                                            <th>Package</th>
-                                        </tr>
-                                        <tr>
-                                            <td><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['accommodation']" /></td>
-                                            <td><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['package']" /></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="pt-3">Details</th>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['details']" /></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="pt-3">Schedule</th>
-                                            <th class="pt-3 pl-3">Max Person</th>
-                                            <th class="pt-3 pl-3">Rate</th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <x-schedule class="mt-0" :start_time="$summary_details['start_time']" :end_time="$summary_details['end_time']" />
-                                            </td>
-                                            <td class="pl-3"><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['max_people']" /></td>
-                                            <td class="pl-3"><x-tag class="mt-0 bg-secondary-bg" :value="'₱ ' . number_format(App\Facades\Format::moneyForDisplay($summary_details['rate']), 2)" /></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
-                    </div>
                 @endif
             </div>
-            {{-- Addons --}}
-            <div class="mt-3 w-[400px]">
+            {{-- Summary Details --}}
+            <div class="grid grid-cols-1 gap-5 overflow-hidden mt-4 lg:grid-cols-[repeat(2,_400px)]">
                 @if ($summary_details)
-                    <div class="inline-block border-2 border-primary-fg w-fit px-2 mt-10 mr-4">
-                        <p>Select any services you want to add:</p>
-                        @foreach ($addons as $id=>$addon)
-                            <div class="my-3 flex items-center gap-2">
-                                @php
-                                    $excess_people = 0;
-                                    if ($id == $add_person_addon_id)
-                                        $excess_people = $no_of_people - $summary_details['max_people'];
-                                @endphp
-                                @if ($excess_people > 0)
-                                    <x-input id="{{$addon['name']}}" class="inline py-0 px-3" wire:click="addAddon({{$id}}, $event.target.checked)" type="checkbox" name="{{$addon['name']}}" :value="$id" checked />
-                                @else
-                                    <x-input id="{{$addon['name']}}" class="inline py-0 px-3" :disabled="$id == $add_person_addon_id" wire:click="addAddon({{$id}}, $event.target.checked)" type="checkbox" name="{{$addon['name']}}" :value="$id" />
-                                @endif
-                                <div>
-                                    <x-label for="{{$addon['name']}}" :value="'(₱ ' . number_format(App\Facades\Format::moneyForDisplay($addon['rate']), 2) . ')'" class="inline w-24" />
-                                    <x-label for="{{$addon['name']}}" :value="__($addon['name'])" class="inline" />
-                                    @if ($excess_people > 0)
-                                        <x-label :value="__('Qty')" class="inline border-l-2 mx-2 pl-2 border-secondary-bg" />
-                                        <x-label :value="__($no_of_people - $summary_details['max_people'])" class="inline" />
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
+                    <div class="inline-block border-2 border-primary-fg w-fit p-3">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th colspan="3"><x-card-subtitle :value="'Summary Details'" /></th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-primary-fg text-left align-top">
+                                <tr>
+                                    <th class="pr-2">Accommodation</th>
+                                    <th>Package</th>
+                                </tr>
+                                <tr>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['accommodation']" /></td>
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['package']" /></td>
+                                </tr>
+                                <tr>
+                                    <th class="pt-3">Details</th>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['details']" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="pt-3">Schedule</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td>
+                                        <x-schedule class="mt-0" :start_time="$summary_details['start_time']" :end_time="$summary_details['end_time']" />
+                                    </td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="pt-3">Max Person</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['max_people']" /></td>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <th class="pt-3">Rate</th>
+                                </tr>
+                                <tr class="md:hidden">
+                                    <td><x-tag class="mt-0 bg-secondary-bg" :value="'₱ ' . number_format(App\Facades\Format::moneyForDisplay($summary_details['rate']), 2)" /></td>
+                                </tr>
+                                <tr class="hidden md:block">
+                                    <th class="pt-3">Schedule</th>
+                                    <th class="pt-3 pl-3">Max Person</th>
+                                    <th class="pt-3 pl-3">Rate</th>
+                                </tr>
+                                <tr class="hidden md:block">
+                                    <td>
+                                        <x-schedule class="mt-0" :start_time="$summary_details['start_time']" :end_time="$summary_details['end_time']" />
+                                    </td>
+                                    <td class="pl-3"><x-tag class="mt-0 bg-secondary-bg" :value="$summary_details['max_people']" /></td>
+                                    <td class="pl-3"><x-tag class="mt-0 bg-secondary-bg" :value="'₱ ' . number_format(App\Facades\Format::moneyForDisplay($summary_details['rate']), 2)" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 @endif
+                {{-- Addons --}}
+                <div class="w-full mt-3 md:w-[400px] md:mt-0">
+                    @if ($summary_details)
+                        <div class="inline-block w-full border-2 border-primary-fg px-2">
+                            <p>Select any services you want to add:</p>
+                            @foreach ($addons as $id=>$addon)
+                                <div class="my-3 flex items-center gap-2">
+                                    @php
+                                        $excess_people = 0;
+                                        if ($id == $add_person_addon_id)
+                                            $excess_people = $no_of_people - $summary_details['max_people'];
+                                    @endphp
+                                    @if ($excess_people > 0)
+                                        <x-input id="{{$addon['name']}}" class="inline py-0 px-3" wire:click="addAddon({{$id}}, $event.target.checked)" type="checkbox" name="{{$addon['name']}}" :value="$id" checked />
+                                    @else
+                                        <x-input id="{{$addon['name']}}" class="inline py-0 px-3" :disabled="$id == $add_person_addon_id" wire:click="addAddon({{$id}}, $event.target.checked)" type="checkbox" name="{{$addon['name']}}" :value="$id" />
+                                    @endif
+                                    <div>
+                                        <x-label for="{{$addon['name']}}" :value="'(₱ ' . number_format(App\Facades\Format::moneyForDisplay($addon['rate']), 2) . ')'" class="inline w-24" />
+                                        <x-label for="{{$addon['name']}}" :value="__($addon['name'])" class="inline" />
+                                        @if ($excess_people > 0)
+                                            <x-label :value="__('Qty')" class="inline border-l-2 mx-2 pl-2 border-secondary-bg" />
+                                            <x-label :value="__($no_of_people - $summary_details['max_people'])" class="inline" />
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
-
-        <div class="{{$summary_details ? '' : 'hidden'}} flex gap-5 items-center" >
+        <div class="{{$summary_details ? '' : 'hidden'}} grid grid-cols-1 gap-5 mt-3 md:grid-cols-2 lg:grid-cols-5" >
             {{-- No of People --}}
             @if ($summary_details)
-                <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
+                <div class="inline-block border-2 border-primary-fg w-full p-3 pl-1 mt-4">
                     <x-label for="no_of_people" :value="__('No. of person')" class="inline pl-2" />
                     <x-input id="no_of_people" class="inline w-[50px] py-0 px-1" type="number" min="1" name="no_of_people" :value="old('no_of_people')" wire:change="numberOfPeopleChanged($event.target.value)" required autofocus />
                     <span class="block mt-1 pl-2 text-xs text-red-900">Note: Do not count 12 yr. old below kids under 3ft height.</span>
@@ -146,7 +164,7 @@
             @endif
             {{-- type of age --}}
             @if ($summary_details)
-            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-full p-3 pl-1 mt-4">
                 <div>
                     <x-label for="no_of_below_3ft" :value="__('No. of kids (12 yrs below):')" class="block pl-2" />
                     <x-label for="no_of_below_3ft" :value="__('Height under 3ft.')" class="inline pl-2" />
@@ -160,21 +178,21 @@
             @endif
             {{-- Discount Seniors / PWD --}}
             @if ($summary_details)
-            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-full p-3 pl-1 mt-4">
                 <x-label for="discountable" :value="(self::DISCOUNT_VALUE . __('% Discount'))" class="block text-right text-primary-fg text-xs" />
                 <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary-fg focus:ring-primary-bg cursor-pointer" wire:model="discountable" name="discountable">
                 <x-label for="discountable" :value="__('Seniors / PWD')" class="inline pl-2" />
             </div>
             @endif
             {{-- Reserved Date --}}
-            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-full p-3 pl-1 mt-4">
                 <x-label for="reserved_date" :value="__('*should be at least one week ahead')" class="block text-right text-primary-fg text-xs" />
                 <x-label for="reserved_date" :value="__('Reservation date')" class="inline pl-2" />
                 <x-input id="reserved_date" class="inline w-fit py-0 px-1" :value="$reserved_date" required autofocus />
             </div>
 
             {{-- Catering --}}
-            <div class="inline-block border-2 border-primary-fg w-[20%] p-3 pl-1 mt-4">
+            <div class="inline-block border-2 border-primary-fg w-full p-3 pl-1 mt-4">
                 <x-label for="reserved_date" :value="__('Catering Package')" class="inline pl-2" />
                 <div class="inline-block border-2 border-primary-fg w-fit px-2">
                     <x-dropdown align="left" width="48">

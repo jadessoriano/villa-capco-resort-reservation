@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="flex ml-10">
-        <div class="w-1/4 h-fit">
+    <div class="flex flex-col-reverse lg:ml-10 lg:flex-row">
+        <div class="w-full h-fit lg:w-1/4">
             <div class="h-full m-5 p-3 bg-primary-bg rounded-lg">
-                <x-card-title :value="'User Information'" />
-                <div class="w-full sm:max-w-md overflow-hidden sm:rounded-lg">
+                <x-card-title class="overflow-hidden" :value="'User Information'" />
+                <div class="w-full overflow-hidden sm:rounded-lg">
                     <!-- Validation Errors -->
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-2/3 m-5">
+        <div class="w-full p-5">
             @auth
                 @if ($current_reservation)
                     <livewire:reservations-info :current_reservation="$current_reservation" />

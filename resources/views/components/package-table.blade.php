@@ -2,7 +2,7 @@
 
 <div {{ $attributes->merge(['class' => 'font-semibold text-sm rounded-lg m-3 pt-0.5']) }}>
     @foreach ($packages as $package)
-    <table class="inline-block p-3 mr-4 border-2 h-full rounded-lg border-primary-fg transition duration-700 ease-in-out hover:scale-105">
+    <table class="inline-block p-3 mr-4 border-2 h-auto rounded-lg border-primary-fg transition duration-700 ease-in-out hover:scale-105">
         <thead>
             <tr>
                 <th colspan="2">{{ $package->name }}</th>
